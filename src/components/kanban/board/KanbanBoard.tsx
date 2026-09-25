@@ -16,10 +16,12 @@ import {
   type UniqueIdentifier,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import type { Column, ColumnId, Task } from '../../types/task';
-import { moveMessage, useBoardStore } from '../../store/useBoardStore';
-import KanbanColumn from './KanbanColumn';
-import { KanbanCard } from './KanbanCard';
+import type { Column, ColumnId, Task } from '../../../types/task';
+import { moveMessage, useBoardStore } from '../../../store/useBoardStore';
+import Button from '../button/Button';
+import KanbanColumn from '../column/KanbanColumn';
+import { KanbanCard } from '../card/KanbanCard';
+import './board.css';
 
 interface KanbanBoardProps {
   tasks: Task[];
@@ -175,9 +177,9 @@ const AddListButton: React.FC<{ onAdd: (title: string) => void }> = ({ onAdd }) 
         autoFocus
       />
       <div className="k-add-list__actions">
-        <button type="submit" className="k-btn k-btn--primary" disabled={!title.trim()}>
+        <Button type="submit" variant="primary" disabled={!title.trim()}>
           Add list
-        </button>
+        </Button>
         <button type="button" className="k-icon-btn" onClick={() => setIsAdding(false)} aria-label="Cancel">
           <IonIcon icon={closeOutline} aria-hidden="true" />
         </button>

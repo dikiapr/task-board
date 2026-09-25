@@ -13,12 +13,14 @@ import {
   searchOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
-import type { LabelType } from '../../types/task';
-import { BOARD_NAME, LABELS, MEMBERS } from '../../data/constants';
-import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../utils/filterTasks';
-import { AvatarStack, MemberAvatar } from './Avatar';
-import { LabelPill } from './KanbanCard';
-import { usePopover } from './usePopover';
+import type { LabelType } from '../../../types/task';
+import { BOARD_NAME, LABELS, MEMBERS } from '../../../data/constants';
+import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../../utils/filterTasks';
+import { AvatarStack, MemberAvatar } from '../avatar/Avatar';
+import Button from '../button/Button';
+import { LabelPill } from '../card/KanbanCard';
+import { usePopover } from '../../../hooks/usePopover';
+import './header.css';
 
 const DUE_OPTIONS: { value: DueFilter; label: string }[] = [
   { value: 'all', label: 'Any time' },
@@ -74,26 +76,24 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
           <IonIcon icon={chevronDown} aria-hidden="true" />
         </button>
         <AvatarStack memberIds={MEMBERS.map((m) => m.id)} max={4} size="md" />
-        <button type="button" className="k-btn k-btn--soft" onClick={inviteMenu.open}>
-          <IonIcon icon={personAddOutline} aria-hidden="true" />
+        <Button variant="soft" icon={personAddOutline} onClick={inviteMenu.open}>
           Invite
-        </button>
+        </Button>
       </div>
 
       <div className="k-header__group k-header__group--end">
-        <button
-          type="button"
-          className={`k-btn k-btn--ghost${activeCount > 0 ? ' is-active' : ''}`}
+        <Button
+          variant="ghost"
+          icon={funnelOutline}
+          className={activeCount > 0 ? 'is-active' : undefined}
           onClick={filterMenu.open}
         >
-          <IonIcon icon={funnelOutline} aria-hidden="true" />
           Filter
           {activeCount > 0 && <span className="k-badge">{activeCount}</span>}
-        </button>
-        <button type="button" className="k-btn k-btn--ghost" onClick={transferMenu.open}>
-          <IonIcon icon={swapHorizontalOutline} aria-hidden="true" />
+        </Button>
+        <Button variant="ghost" icon={swapHorizontalOutline} onClick={transferMenu.open}>
           <span className="k-hide-sm">Export / Import</span>
-        </button>
+        </Button>
         <label className="k-search">
           <IonIcon icon={searchOutline} aria-hidden="true" />
           <input
@@ -162,9 +162,9 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button type="submit" className="k-btn k-btn--primary" disabled={!emailValid}>
+            <Button type="submit" variant="primary" disabled={!emailValid}>
               Invite
-            </button>
+            </Button>
           </form>
         </div>
       </IonPopover>
@@ -230,17 +230,16 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
           </div>
 
           <div className="k-pop__footer">
-            <button
-              type="button"
-              className="k-btn k-btn--ghost"
+            <Button
+              variant="ghost"
               disabled={activeCount === 0 && !filters.search}
               onClick={() => onFiltersChange(EMPTY_FILTERS)}
             >
               Clear all
-            </button>
-            <button type="button" className="k-btn k-btn--primary" onClick={filterMenu.close}>
+            </Button>
+            <Button variant="primary" onClick={filterMenu.close}>
               Done
-            </button>
+            </Button>
           </div>
         </div>
       </IonPopover>

@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState, type SetStateAction } from 'react';
 import { IonContent, IonIcon, IonModal, useIonAlert } from '@ionic/react';
 import { checkmark, close, pencil, trashOutline } from 'ionicons/icons';
-import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../types/task';
-import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../data/constants';
-import { useBoardStore } from '../../store/useBoardStore';
-import ActivityList from './detail/ActivityList';
-import AssigneeField from './detail/AssigneeField';
-import AttachmentsField from './detail/AttachmentsField';
-import ChecklistField from './detail/ChecklistField';
-import CoverImageField from './detail/CoverImageField';
-import DueDateField from './detail/DueDateField';
+import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../../types/task';
+import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../../data/constants';
+import { useBoardStore } from '../../../store/useBoardStore';
+import Button from '../button/Button';
+import ActivityList from './ActivityList';
+import AssigneeField from './AssigneeField';
+import AttachmentsField from './AttachmentsField';
+import ChecklistField from './ChecklistField';
+import CoverImageField from './CoverImageField';
+import DueDateField from './DueDateField';
+import './modal.css';
 
 export type EditorState = { mode: 'create'; columnId: ColumnId } | { mode: 'edit'; taskId: string };
 
@@ -178,16 +180,9 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
           <IonIcon icon={checkmark} aria-hidden="true" />
           {isComplete ? 'Completed' : 'Mark Complete'}
         </button>
-        <div className="k-detail__topbar-actions">
-          {editor.mode === 'edit' && (
-            <button type="button" className="k-icon-btn k-icon-btn--danger" onClick={confirmDelete} aria-label="Delete task">
-              <IonIcon icon={trashOutline} aria-hidden="true" />
-            </button>
-          )}
-          <button type="button" className="k-icon-btn k-icon-btn--boxed" onClick={() => onClose(false)} aria-label="Close">
-            <IonIcon icon={close} aria-hidden="true" />
-          </button>
-        </div>
+        <button type="button" className="k-icon-btn k-icon-btn--boxed" onClick={() => onClose(false)} aria-label="Close">
+          <IonIcon icon={close} aria-hidden="true" />
+        </button>
       </div>
 
       <IonContent className="k-detail__content">
@@ -313,12 +308,17 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
       </IonContent>
 
       <div className="k-detail__footer">
-        <button type="button" className="k-btn k-btn--soft" onClick={() => onClose(true)}>
+        {editor.mode === 'edit' && (
+          <Button variant="danger" icon={trashOutline} className="k-detail__delete" onClick={confirmDelete}>
+            Delete
+          </Button>
+        )}
+        <Button variant="soft" onClick={() => onClose(true)}>
           Discard
-        </button>
-        <button type="button" className="k-btn k-btn--primary" onClick={save}>
+        </Button>
+        <Button variant="primary" onClick={save}>
           Save
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -61,11 +61,6 @@ ion-modal.k-modal {
   color: #16804f;
 }
 
-.k-detail__topbar-actions {
-  display: flex;
-  gap: 6px;
-}
-
 .k-detail__content {
   flex: 1;
   --background: #fff;
@@ -508,6 +503,10 @@ ion-modal.k-modal {
 
 .k-detail__footer .k-btn {
   min-width: 72px;
+}
+
+.k-detail__delete {
+  margin-right: auto;
 }
 
 @keyframes k-fade-in {

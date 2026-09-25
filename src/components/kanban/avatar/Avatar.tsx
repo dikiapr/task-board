@@ -1,5 +1,6 @@
-import type { Member } from '../../types/task';
-import { getMember } from '../../data/constants';
+import type { Member } from '../../../types/task';
+import { getMember } from '../../../data/constants';
+import './avatar.css';
 
 const initials = (name: string) =>
   name

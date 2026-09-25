@@ -1,0 +1,121 @@
+.k-column {
+  display: flex;
+  flex: 0 0 290px;
+  flex-direction: column;
+  max-height: 100%;
+  border-radius: 12px;
+  scroll-snap-align: start;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    flex-basis 0.25s ease;
+}
+
+.k-column--target {
+  background: #f5f8fd;
+  box-shadow: 0 0 0 2px var(--k-primary-soft);
+}
+
+.k-column__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 4px 12px;
+}
+
+.k-column__title {
+  overflow: hidden;
+  margin: 0 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.k-column__rename {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--k-primary);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.k-column__collapse {
+  margin-left: auto;
+}
+
+.k-column__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 120px;
+  padding: 2px 4px 12px;
+  overflow-y: auto;
+}
+
+.k-column__empty {
+  margin: 0;
+  padding: 24px 12px;
+  border: 1.5px dashed var(--k-border);
+  border-radius: var(--k-radius);
+  color: var(--k-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.k-column--collapsed {
+  flex-basis: 48px;
+}
+
+.k-column__expand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 48px;
+  min-height: 220px;
+  padding: 12px 0;
+  border: 0;
+  border-radius: 12px;
+  background: var(--k-surface);
+  color: var(--k-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.k-column__expand:hover {
+  background: var(--k-surface-strong);
+}
+
+.k-column__vertical-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+}
+
+.k-column__count {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--k-muted);
+  font-size: 0.72rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-column {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .k-column:not(.k-column--collapsed) {
+    flex-basis: 82vw;
+  }
+}

@@ -10,11 +10,12 @@ import {
 } from 'ionicons/icons';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import type { Column, ColumnId, Task } from '../../types/task';
-import { DONE_COLUMN_ID } from '../../data/constants';
-import { useBoardStore } from '../../store/useBoardStore';
-import { SortableKanbanCard } from './KanbanCard';
-import { usePopover } from './usePopover';
+import type { Column, ColumnId, Task } from '../../../types/task';
+import { DONE_COLUMN_ID } from '../../../data/constants';
+import { useBoardStore } from '../../../store/useBoardStore';
+import { SortableKanbanCard } from '../card/KanbanCard';
+import { usePopover } from '../../../hooks/usePopover';
+import './column.css';
 
 interface KanbanColumnProps {
   column: Column;

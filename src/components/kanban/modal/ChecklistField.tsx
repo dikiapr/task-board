@@ -3,7 +3,8 @@ import { IonCheckbox, IonIcon } from '@ionic/react';
 import { add, closeOutline } from 'ionicons/icons';
 import { nanoid } from 'nanoid';
 import type { Subtask } from '../../../types/task';
-import { ProgressBar } from '../KanbanCard';
+import Button from '../button/Button';
+import { ProgressBar } from '../card/KanbanCard';
 
 interface ChecklistFieldProps {
   value: Subtask[];
@@ -67,18 +68,17 @@ const ChecklistField: React.FC<ChecklistFieldProps> = ({ value, onChange }) => {
               if (e.key === 'Escape') setIsAdding(false);
             }}
           />
-          <button type="button" className="k-btn k-btn--primary" disabled={!newTitle.trim()} onClick={() => addSubtask(newTitle)}>
+          <Button variant="primary" disabled={!newTitle.trim()} onClick={() => addSubtask(newTitle)}>
             Add
-          </button>
+          </Button>
           <button type="button" className="k-icon-btn" onClick={() => setIsAdding(false)} aria-label="Cancel">
             <IonIcon icon={closeOutline} aria-hidden="true" />
           </button>
         </div>
       ) : (
-        <button type="button" className="k-btn k-btn--soft k-btn--block" onClick={() => setIsAdding(true)}>
-          <IonIcon icon={add} aria-hidden="true" />
+        <Button variant="soft" icon={add} block onClick={() => setIsAdding(true)}>
           Add subtask
-        </button>
+        </Button>
       )}
     </div>
   );

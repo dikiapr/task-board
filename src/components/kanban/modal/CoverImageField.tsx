@@ -3,7 +3,8 @@ import { IonIcon, IonPopover } from '@ionic/react';
 import { cloudUploadOutline, imageOutline } from 'ionicons/icons';
 import { DUMMY_COVERS } from '../../../data/constants';
 import { imageFileToDataUrl } from '../../../utils/image';
-import { usePopover } from '../usePopover';
+import Button from '../button/Button';
+import { usePopover } from '../../../hooks/usePopover';
 
 interface CoverImageFieldProps {
   value?: string;
@@ -30,12 +31,12 @@ const CoverImageField: React.FC<CoverImageFieldProps> = ({ value, onChange }) =>
         <>
           <img src={value} alt="Task cover" />
           <div className="k-cover__actions">
-            <button type="button" className="k-btn k-btn--overlay" onClick={picker.open}>
+            <Button variant="overlay" onClick={picker.open}>
               Change
-            </button>
-            <button type="button" className="k-btn k-btn--overlay" onClick={() => onChange(undefined)}>
+            </Button>
+            <Button variant="overlay" onClick={() => onChange(undefined)}>
               Remove
-            </button>
+            </Button>
           </div>
         </>
       ) : (
@@ -65,17 +66,17 @@ const CoverImageField: React.FC<CoverImageFieldProps> = ({ value, onChange }) =>
               </button>
             ))}
           </div>
-          <button
-            type="button"
-            className="k-btn k-btn--soft k-btn--block"
+          <Button
+            variant="soft"
+            icon={cloudUploadOutline}
+            block
             onClick={() => {
               picker.close();
               fileInput.current?.click();
             }}
           >
-            <IonIcon icon={cloudUploadOutline} aria-hidden="true" />
             Upload from device
-          </button>
+          </Button>
         </div>
       </IonPopover>
 

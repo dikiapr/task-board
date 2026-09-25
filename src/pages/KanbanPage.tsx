@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
-import { IonContent, IonPage, useIonAlert, useIonToast } from '@ionic/react';
-import { alertCircleOutline, checkmarkCircleOutline, trashOutline } from 'ionicons/icons';
+import { IonContent, IonPage, useIonAlert } from '@ionic/react';
+import { alertCircleOutline, trashOutline } from 'ionicons/icons';
 import type { Column, ColumnId, Task } from '../types/task';
 import { useBoardStore } from '../store/useBoardStore';
 import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../utils/filterTasks';
 import { exportBoard, parseBoardFile } from '../utils/exportImport';
-import KanbanHeader from '../components/kanban/KanbanHeader';
-import KanbanBoard from '../components/kanban/KanbanBoard';
-import TaskDetailModal, { type EditorState } from '../components/kanban/TaskDetailModal';
 import '../components/kanban/kanban.css';
-import '../components/kanban/detail.css';
+import KanbanHeader from '../components/kanban/header/KanbanHeader';
+import KanbanBoard from '../components/kanban/board/KanbanBoard';
+import TaskDetailModal, { type EditorState } from '../components/kanban/modal/TaskDetailModal';
+import { useToast } from '../hooks/useToast';
 
 const KanbanPage: React.FC = () => {
   const tasks = useBoardStore((s) => s.tasks);
@@ -17,22 +17,8 @@ const KanbanPage: React.FC = () => {
   const visibleTasks = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
   const [editor, setEditor] = useState<EditorState | null>(null);
 
-  const [presentToast, dismissToast] = useIonToast();
+  const toast = useToast();
   const [presentAlert] = useIonAlert();
-
-  const toast = async (message: string, options: { icon?: string; color?: string; undo?: () => void } = {}) => {
-    await dismissToast();
-    return presentToast({
-      message,
-      duration: 2500,
-      position: 'bottom',
-      cssClass: 'k-toast',
-      icon: options.icon ?? checkmarkCircleOutline,
-      color: options.color,
-      swipeGesture: 'vertical',
-      buttons: options.undo ? [{ text: 'Undo', handler: options.undo }] : undefined,
-    });
-  };
 
   const openCreate = (columnId: ColumnId) => setEditor({ mode: 'create', columnId });
   const openEdit = (task: Task) => setEditor({ mode: 'edit', taskId: task.id });

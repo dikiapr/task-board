@@ -1,0 +1,84 @@
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.1s;
+}
+
+.k-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.k-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.k-btn--soft {
+  background: var(--k-surface);
+  color: var(--k-text);
+}
+
+.k-btn--soft:hover:not(:disabled) {
+  background: var(--k-surface-strong);
+}
+
+.k-btn--ghost {
+  background: transparent;
+  color: var(--k-text);
+}
+
+.k-btn--ghost:hover:not(:disabled) {
+  background: var(--k-surface);
+}
+
+.k-btn--ghost.is-active {
+  color: var(--k-primary);
+}
+
+.k-btn--primary {
+  background: var(--k-primary);
+  color: #fff;
+}
+
+.k-btn--primary:hover:not(:disabled) {
+  background: var(--k-primary-strong);
+}
+
+.k-btn--danger {
+  box-sizing: border-box;
+  border: 1px solid var(--k-danger);
+  background: transparent;
+  color: var(--k-danger);
+}
+
+.k-btn--danger:hover:not(:disabled) {
+  background: #fde8ec;
+}
+
+.k-btn--overlay {
+  background: rgb(255 255 255 / 0.92);
+  color: var(--k-text);
+  box-shadow: 0 2px 6px rgb(15 23 42 / 0.15);
+}
+
+.k-btn--block {
+  width: 100%;
+}
+
+.k-btn ion-icon {
+  font-size: 1rem;
+}
