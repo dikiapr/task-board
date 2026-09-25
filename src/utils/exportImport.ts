@@ -1,5 +1,4 @@
-import type { BoardData } from '../store/useBoardStore';
-import type { Task } from '../types/task';
+import type { BoardData, Column, Task } from '../types/task';
 import { sanitizeAttachments } from './attachment';
 import { todayISO } from './date';
 
@@ -29,7 +28,7 @@ export const parseBoardFile = (text: string): BoardData => {
   }
 
   const columns = json.columns.filter(
-    (c): c is BoardData['columns'][number] => isObject(c) && typeof c.id === 'string' && typeof c.title === 'string',
+    (c): c is Column => isObject(c) && typeof c.id === 'string' && typeof c.title === 'string',
   );
   const columnIds = new Set(columns.map((c) => c.id));
 

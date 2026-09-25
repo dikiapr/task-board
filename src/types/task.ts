@@ -51,3 +51,8 @@ export interface Task {
 }
 
 export type TaskInput = Omit<Task, 'id' | 'createdAt' | 'activity'>;
+
+export interface BoardData {
+  columns: Column[];
+  tasks: Task[];
+}

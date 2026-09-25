@@ -1,15 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
-import type { Activity, Column, ColumnId, Task, TaskInput } from '../types/task';
+import type { Activity, BoardData, Column, ColumnId, Task, TaskInput } from '../types/task';
 import { createDefaultColumns, createSeedTasks } from '../data/seed';
 import { DONE_COLUMN_ID, NEW_COLUMN_COLOR } from '../data/constants';
 import { sanitizeAttachments } from '../utils/attachment';
-
-export interface BoardData {
-  columns: Column[];
-  tasks: Task[];
-}
 
 interface BoardState extends BoardData {
   // ----- Task -----
