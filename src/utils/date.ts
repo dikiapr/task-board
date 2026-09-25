@@ -1,4 +1,4 @@
-export const toISODate = (date: Date): string => {
+const toISODate = (date: Date): string => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const d = String(date.getDate()).padStart(2, '0');
@@ -18,7 +18,7 @@ export const addDays = (iso: string, days: number): string => {
   return toISODate(date);
 };
 
-export const daysBetween = (from: string, to: string): number => {
+const daysBetween = (from: string, to: string): number => {
   const toUTC = (iso: string) => {
     const [y, m, d] = iso.split('-').map(Number);
     return Date.UTC(y, m - 1, d);

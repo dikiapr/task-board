@@ -7,17 +7,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test.e2e": "cypress run",
     "test.unit": "vitest",
     "test.coverage": "vitest run --coverage",
     "lint": "eslint"
   },
   "dependencies": {
-    "@capacitor/app": "8.1.1",
     "@capacitor/core": "8.5.2",
-    "@capacitor/haptics": "8.0.2",
-    "@capacitor/keyboard": "8.0.5",
-    "@capacitor/status-bar": "8.0.3",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -33,6 +28,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "8.5.2",
+    "@eslint/js": "^9.39.5",
     "@testing-library/dom": ">=7.21.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.2.0",
@@ -42,9 +38,7 @@
     "@vitejs/plugin-legacy": "^8.0.0",
     "@vitejs/plugin-react": "^6.0.0",
     "@vitest/coverage-v8": "~4.1.11",
-    "cypress": "^13.5.0",
     "eslint": "^9.20.1",
-    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
@@ -55,5 +49,5 @@
     "vite": "^8.0.0",
     "vitest": "~4.1.11"
   },
-  "description": "An Ionic project"
+  "description": "Kanban task board built with Ionic React"
 }

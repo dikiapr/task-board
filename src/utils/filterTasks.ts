@@ -1,4 +1,5 @@
 import type { LabelType, Task } from '../types/task';
+import { DONE_COLUMN_ID } from '../data/constants';
 import { addDays, todayISO } from './date';
 
 export type DueFilter = 'all' | 'overdue' | 'today' | 'week' | 'none';
@@ -20,8 +21,8 @@ export const EMPTY_FILTERS: TaskFilters = {
 export const isFilterActive = (f: TaskFilters) =>
   f.search.trim() !== '' || f.assigneeIds.length > 0 || f.labels.length > 0 || f.due !== 'all';
 
-export const isOverdue = (task: Task, today = todayISO()) =>
-  task.dueDate !== null && task.dueDate < today && task.columnId !== 'done';
+const isOverdue = (task: Task, today: string) =>
+  task.dueDate !== null && task.dueDate < today && task.columnId !== DONE_COLUMN_ID;
 
 const matchesDue = (task: Task, due: DueFilter, today: string) => {
   switch (due) {
