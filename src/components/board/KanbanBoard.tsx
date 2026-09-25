@@ -1,23 +1,10 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { IonIcon } from '@ionic/react';
 import { addOutline, closeOutline } from 'ionicons/icons';
-import {
-  closestCorners,
-  DndContext,
-  DragOverlay,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type DragOverEvent,
-  type DragStartEvent,
-  type UniqueIdentifier,
-} from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
 import type { Column, ColumnId, Task } from '../../types/task';
-import { moveMessage, useBoardStore } from '../../store/useBoardStore';
+import { useBoardStore } from '../../store/useBoardStore';
+import { useBoardDnd } from '../../hooks/useBoardDnd';
 import Button from '../button/Button';
 import KanbanColumn from '../column/KanbanColumn';
 import { KanbanCard } from '../card/KanbanCard';
@@ -32,9 +19,6 @@ interface KanbanBoardProps {
   onDeleteColumn: (column: Column) => void;
 }
 
-const findTask = (id: UniqueIdentifier) => useBoardStore.getState().tasks.find((t) => t.id === id);
-const isColumnId = (id: UniqueIdentifier) => useBoardStore.getState().columns.some((c) => c.id === id);
-
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
   tasks,
   isFiltering,
@@ -44,78 +28,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   onDeleteColumn,
 }) => {
   const columns = useBoardStore((s) => s.columns);
-  const moveTask = useBoardStore((s) => s.moveTask);
-  const logActivity = useBoardStore((s) => s.logActivity);
-
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
-  const snapshot = useRef<Task[] | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-      keyboardCodes: { start: ['Space'], cancel: ['Escape'], end: ['Space'] },
-    }),
-  );
-
-  const handleDragStart = ({ active }: DragStartEvent) => {
-    snapshot.current = useBoardStore.getState().tasks;
-    setActiveTask(findTask(active.id) ?? null);
-  };
-
-  const handleDragOver = ({ active, over }: DragOverEvent) => {
-    if (!over) return;
-    const task = findTask(active.id);
-    if (!task) return;
-
-    const overIsTask = over.data.current?.type === 'task';
-    const overColumnId = isColumnId(over.id) ? String(over.id) : findTask(over.id)?.columnId;
-    if (!overColumnId || overColumnId === task.columnId) return;
-
-    const translated = active.rect.current.translated;
-    const isBelowOverItem =
-      overIsTask && translated !== null && translated.top > over.rect.top + over.rect.height / 2;
-
-    moveTask(task.id, overColumnId, overIsTask ? String(over.id) : undefined, isBelowOverItem ? 'after' : 'before');
-  };
-
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    const startColumnId = snapshot.current?.find((t) => t.id === active.id)?.columnId;
-    setActiveTask(null);
-    snapshot.current = null;
-
-    if (over && active.id !== over.id && over.data.current?.type === 'task') {
-      const task = findTask(active.id);
-      const overTask = findTask(over.id);
-      if (task && overTask && task.columnId === overTask.columnId) {
-        moveTask(task.id, overTask.columnId, overTask.id);
-      }
-    }
-
-    const endColumnId = findTask(active.id)?.columnId;
-    if (startColumnId && endColumnId && startColumnId !== endColumnId) {
-      logActivity(String(active.id), moveMessage(useBoardStore.getState().columns, startColumnId, endColumnId));
-    }
-  };
-
-  const handleDragCancel = () => {
-    if (snapshot.current) useBoardStore.setState({ tasks: snapshot.current });
-    snapshot.current = null;
-    setActiveTask(null);
-  };
-
-  const draggingColumnId = activeTask ? findTask(activeTask.id)?.columnId : undefined;
+  const { activeTask, draggingColumnId, contextProps } = useBoardDnd();
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
-    >
+    <DndContext {...contextProps}>
       <div className="k-board">
         {columns.map((column) => (
           <KanbanColumn
