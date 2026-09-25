@@ -13,17 +13,20 @@ import '@ionic/react/css/typography.css';
 /* Theme variables */
 import './theme/variables.css';
 import KanbanPage from './pages/KanbanPage';
+import ErrorBoundary from './components/error/ErrorBoundary';
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/kanban" element={<KanbanPage />} />
-        <Route path="*" element={<Navigate to="/kanban" replace />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
+    <ErrorBoundary>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path="/kanban" element={<KanbanPage />} />
+          <Route path="*" element={<Navigate to="/kanban" replace />} />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </ErrorBoundary>
   </IonApp>
 );
 
