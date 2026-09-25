@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { IonIcon } from '@ionic/react';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
-import { formatLongDate } from '../../../utils/date';
+import { formatLongDate } from '../../utils/date';
 
 interface DueDateFieldProps {
   value: string | null;

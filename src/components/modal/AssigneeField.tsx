@@ -1,8 +1,8 @@
 import { IonIcon, IonPopover } from '@ionic/react';
 import { add, checkmark } from 'ionicons/icons';
-import { MEMBERS } from '../../../data/constants';
+import { MEMBERS } from '../../data/constants';
 import { AvatarStack, MemberAvatar } from '../avatar/Avatar';
-import { usePopover } from '../../../hooks/usePopover';
+import { usePopover } from '../../hooks/usePopover';
 
 interface AssigneeFieldProps {
   value: string[];

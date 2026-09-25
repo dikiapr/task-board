@@ -2,7 +2,7 @@ import { useState, type Dispatch, type SetStateAction } from 'react';
 import { IonCheckbox, IonIcon } from '@ionic/react';
 import { add, closeOutline } from 'ionicons/icons';
 import { nanoid } from 'nanoid';
-import type { Subtask } from '../../../types/task';
+import type { Subtask } from '../../types/task';
 import Button from '../button/Button';
 import { ProgressBar } from '../card/KanbanCard';
 

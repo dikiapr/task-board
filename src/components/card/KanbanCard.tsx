@@ -2,9 +2,9 @@ import { IonIcon } from '@ionic/react';
 import { attachOutline, checkboxOutline, flag, timeOutline } from 'ionicons/icons';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { LabelType, Task } from '../../../types/task';
-import { DONE_COLUMN_ID, PRIORITY_COLORS } from '../../../data/constants';
-import { formatShortDate, getDueStatus } from '../../../utils/date';
+import type { LabelType, Task } from '../../types/task';
+import { DONE_COLUMN_ID, PRIORITY_COLORS } from '../../data/constants';
+import { formatShortDate, getDueStatus } from '../../utils/date';
 import { AvatarStack } from '../avatar/Avatar';
 import './card.css';
 

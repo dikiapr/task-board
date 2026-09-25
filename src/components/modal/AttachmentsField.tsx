@@ -2,8 +2,8 @@ import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { IonIcon } from '@ionic/react';
 import { closeOutline, documentOutline, documentTextOutline, imageOutline } from 'ionicons/icons';
 import { nanoid } from 'nanoid';
-import type { Attachment, AttachmentType } from '../../../types/task';
-import { ALLOWED_ATTACHMENT_LABEL, ATTACHMENT_ACCEPT, detectAttachmentType } from '../../../utils/attachment';
+import type { Attachment, AttachmentType } from '../../types/task';
+import { ALLOWED_ATTACHMENT_LABEL, ATTACHMENT_ACCEPT, detectAttachmentType } from '../../utils/attachment';
 
 const ICONS: Record<AttachmentType, string> = {
   pdf: documentTextOutline,

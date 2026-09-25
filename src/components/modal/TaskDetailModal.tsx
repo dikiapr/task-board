@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type SetStateAction } from 'react';
 import { IonContent, IonIcon, IonModal, useIonAlert } from '@ionic/react';
 import { checkmark, close, pencil, trashOutline } from 'ionicons/icons';
-import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../../types/task';
-import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../../data/constants';
-import { useBoardStore } from '../../../store/useBoardStore';
+import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../types/task';
+import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../data/constants';
+import { useBoardStore } from '../../store/useBoardStore';
 import Button from '../button/Button';
 import ActivityList from './ActivityList';
 import AssigneeField from './AssigneeField';

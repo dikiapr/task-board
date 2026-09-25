@@ -1,5 +1,5 @@
-import type { Activity } from '../../../types/task';
-import { formatRelativeTime } from '../../../utils/date';
+import type { Activity } from '../../types/task';
+import { formatRelativeTime } from '../../utils/date';
 
 const ActivityList: React.FC<{ items: Activity[] }> = ({ items }) => {
   if (items.length === 0) {

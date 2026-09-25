@@ -13,13 +13,13 @@ import {
   searchOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
-import type { LabelType } from '../../../types/task';
-import { BOARD_NAME, LABELS, MEMBERS } from '../../../data/constants';
-import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../../utils/filterTasks';
+import type { LabelType } from '../../types/task';
+import { BOARD_NAME, LABELS, MEMBERS } from '../../data/constants';
+import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../utils/filterTasks';
 import { AvatarStack, MemberAvatar } from '../avatar/Avatar';
 import Button from '../button/Button';
 import { LabelPill } from '../card/KanbanCard';
-import { usePopover } from '../../../hooks/usePopover';
+import { usePopover } from '../../hooks/usePopover';
 import './header.css';
 
 const DUE_OPTIONS: { value: DueFilter; label: string }[] = [

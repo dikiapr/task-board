@@ -16,8 +16,8 @@ import {
   type UniqueIdentifier,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import type { Column, ColumnId, Task } from '../../../types/task';
-import { moveMessage, useBoardStore } from '../../../store/useBoardStore';
+import type { Column, ColumnId, Task } from '../../types/task';
+import { moveMessage, useBoardStore } from '../../store/useBoardStore';
 import Button from '../button/Button';
 import KanbanColumn from '../column/KanbanColumn';
 import { KanbanCard } from '../card/KanbanCard';

@@ -5,10 +5,10 @@ import type { Column, ColumnId, Task } from '../types/task';
 import { useBoardStore } from '../store/useBoardStore';
 import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../utils/filterTasks';
 import { exportBoard, parseBoardFile } from '../utils/exportImport';
-import '../components/kanban/kanban.css';
-import KanbanHeader from '../components/kanban/header/KanbanHeader';
-import KanbanBoard from '../components/kanban/board/KanbanBoard';
-import TaskDetailModal, { type EditorState } from '../components/kanban/modal/TaskDetailModal';
+import '../theme/kanban.css';
+import KanbanHeader from '../components/header/KanbanHeader';
+import KanbanBoard from '../components/board/KanbanBoard';
+import TaskDetailModal, { type EditorState } from '../components/modal/TaskDetailModal';
 import { useToast } from '../hooks/useToast';
 
 const KanbanPage: React.FC = () => {

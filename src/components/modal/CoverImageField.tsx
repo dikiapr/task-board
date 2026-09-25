@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import { IonIcon, IonPopover } from '@ionic/react';
 import { cloudUploadOutline, imageOutline } from 'ionicons/icons';
-import { DUMMY_COVERS } from '../../../data/constants';
-import { imageFileToDataUrl } from '../../../utils/image';
+import { DUMMY_COVERS } from '../../data/constants';
+import { imageFileToDataUrl } from '../../utils/image';
 import Button from '../button/Button';
-import { usePopover } from '../../../hooks/usePopover';
+import { usePopover } from '../../hooks/usePopover';
 
 interface CoverImageFieldProps {
   value?: string;
