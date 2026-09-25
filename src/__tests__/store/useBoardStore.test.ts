@@ -1,6 +1,6 @@
-import type { Task, TaskInput } from '../types/task';
-import { useBoardStore } from './useBoardStore';
-import { createDefaultColumns } from '../data/seed';
+import type { Task, TaskInput } from '../../types/task';
+import { useBoardStore } from '../../store/useBoardStore';
+import { createDefaultColumns } from '../../data/seed';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 const input = (overrides: Partial<TaskInput>): TaskInput => ({
@@ -32,14 +32,14 @@ beforeEach(() => {
 });
 
 describe('useBoardStore', () => {
-  it('addTask menambah task dengan id & createdAt baru', () => {
+  it('addTask adds a task with a new id & createdAt', () => {
     const created = useBoardStore.getState().addTask(input({ title: 'Baru', columnId: 'review' }));
     expect(created.id).toBeTruthy();
     expect(created.createdAt).toBeTruthy();
     expect(useBoardStore.getState().tasks.at(-1)).toMatchObject({ title: 'Baru', columnId: 'review' });
   });
 
-  it('updateTask hanya mengubah field yang dikirim', () => {
+  it('updateTask changes only the given fields', () => {
     useBoardStore.getState().updateTask('b', { title: 'B edit', label: 'Bug' });
     expect(useBoardStore.getState().tasks.find((t) => t.id === 'b')).toMatchObject({
       title: 'B edit',
@@ -48,23 +48,23 @@ describe('useBoardStore', () => {
     });
   });
 
-  it('deleteTask menghapus task', () => {
+  it('deleteTask removes the task', () => {
     useBoardStore.getState().deleteTask('b');
     expect(order()).toEqual(['todo:a', 'todo:c', 'doing:x', 'doing:y']);
   });
 
   describe('moveTask', () => {
-    it('mengurutkan ulang dalam kolom yang sama (ke bawah)', () => {
+    it('reorders within the same column (downwards)', () => {
       useBoardStore.getState().moveTask('a', 'todo', 'c');
       expect(order()).toEqual(['todo:b', 'todo:c', 'todo:a', 'doing:x', 'doing:y']);
     });
 
-    it('mengurutkan ulang dalam kolom yang sama (ke atas)', () => {
+    it('reorders within the same column (upwards)', () => {
       useBoardStore.getState().moveTask('c', 'todo', 'a');
       expect(order()).toEqual(['todo:c', 'todo:a', 'todo:b', 'doing:x', 'doing:y']);
     });
 
-    it('pindah kolom dan disisipkan sebelum / sesudah task tujuan', () => {
+    it('moves across columns, inserting before / after the target task', () => {
       useBoardStore.getState().moveTask('a', 'doing', 'y');
       expect(order()).toEqual(['todo:b', 'todo:c', 'doing:x', 'doing:a', 'doing:y']);
 
@@ -72,33 +72,33 @@ describe('useBoardStore', () => {
       expect(order()).toEqual(['todo:c', 'doing:x', 'doing:a', 'doing:y', 'doing:b']);
     });
 
-    it('pindah ke kolom kosong ditaruh paling bawah', () => {
+    it('moving to an empty column puts the task at the end', () => {
       useBoardStore.getState().moveTask('x', 'done');
       expect(order()).toEqual(['todo:a', 'todo:b', 'todo:c', 'doing:y', 'done:x']);
     });
   });
 
   describe('activity', () => {
-    it('updateTask mencatat field yang berubah saja', () => {
+    it('updateTask logs only the changed fields', () => {
       useBoardStore.getState().updateTask('a', { title: 'A baru', label: 'Bug', description: '' });
       const task = useBoardStore.getState().tasks.find((t) => t.id === 'a')!;
       expect(task.activity.map((x) => x.message)).toEqual(['Updated title and label']);
     });
 
-    it('pindah kolom lewat form dicatat, pindah ke Done jadi "Marked as complete"', () => {
+    it('logs a column change from the form, and moving to Done as "Marked as complete"', () => {
       useBoardStore.getState().updateTask('a', { columnId: 'doing' });
       useBoardStore.getState().updateTask('a', { columnId: 'done' });
       const task = useBoardStore.getState().tasks.find((t) => t.id === 'a')!;
       expect(task.activity.map((x) => x.message)).toEqual(['Marked as complete', 'Moved from To Do to Doing']);
     });
 
-    it('tidak mencatat apa pun jika tidak ada yang berubah', () => {
+    it('logs nothing when nothing changed', () => {
       useBoardStore.getState().updateTask('a', { title: 'a' });
       expect(useBoardStore.getState().tasks.find((t) => t.id === 'a')!.activity).toEqual([]);
     });
   });
 
-  it('restoreTask mengembalikan task ke posisi semula (Undo)', () => {
+  it('restoreTask puts the task back in its original position (Undo)', () => {
     const { tasks } = useBoardStore.getState();
     const removed = tasks[1];
     useBoardStore.getState().deleteTask(removed.id);
@@ -113,7 +113,7 @@ describe('useBoardStore', () => {
       expect(useBoardStore.getState().columns.at(-1)).toMatchObject({ id: column.id, title: 'Testing' });
     });
 
-    it('deleteColumn menghapus kolom beserta task-nya, kecuali kolom Done', () => {
+    it('deleteColumn removes the column and its tasks, except Done', () => {
       useBoardStore.getState().deleteColumn('doing');
       expect(useBoardStore.getState().columns.map((c) => c.id)).not.toContain('doing');
       expect(order()).toEqual(['todo:a', 'todo:b', 'todo:c']);
@@ -123,7 +123,7 @@ describe('useBoardStore', () => {
     });
   });
 
-  it('migrasi data versi 1 menambahkan kolom default & activity kosong', () => {
+  it('migrating version 1 data adds default columns & empty activity', () => {
     const migrate = useBoardStore.persist.getOptions().migrate!;
     const { activity: _unused, ...oldTask } = task('a', 'todo');
     const migrated = migrate({ tasks: [oldTask] }, 1) as { columns: unknown[]; tasks: Task[] };
@@ -131,7 +131,7 @@ describe('useBoardStore', () => {
     expect(migrated.tasks[0].activity).toEqual([]);
   });
 
-  it('migrasi data versi 2 membuang lampiran yang formatnya tidak diperbolehkan', () => {
+  it('migrating version 2 data drops attachments with disallowed formats', () => {
     const migrate = useBoardStore.persist.getOptions().migrate!;
     const oldTask = {
       ...task('a', 'todo'),
@@ -145,7 +145,7 @@ describe('useBoardStore', () => {
     expect(migrated.tasks[0].attachments.map((a) => a.name)).toEqual(['spec.pdf']);
   });
 
-  it('menyimpan tasks ke localStorage', () => {
+  it('persists tasks to localStorage', () => {
     useBoardStore.getState().deleteTask('a');
     const saved = JSON.parse(localStorage.getItem('task-board') ?? '{}');
     expect(saved.state.tasks.map((t: Task) => t.id)).toEqual(['b', 'c', 'x', 'y']);

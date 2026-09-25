@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ionic/react';
 import {
   addOutline,
@@ -40,6 +40,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   const toggleCollapsed = useBoardStore((s) => s.toggleColumnCollapsed);
   const menu = usePopover();
   const [isRenaming, setIsRenaming] = useState(false);
+  const renameAfterMenu = useRef(false);
 
   const { setNodeRef } = useDroppable({ id: column.id, data: { type: 'column' } });
 
@@ -123,7 +124,20 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         )}
       </div>
 
-      <IonPopover {...menu.props} className="k-popover" alignment="end">
+      <IonPopover
+        {...menu.props}
+        className="k-popover"
+        alignment="end"
+        onDidDismiss={() => {
+          menu.props.onDidDismiss();
+          // Start renaming only once the menu is gone: while it is still open its focus
+          // trap pulls focus back, blurring the rename input and closing it right away.
+          if (renameAfterMenu.current) {
+            renameAfterMenu.current = false;
+            setIsRenaming(true);
+          }
+        }}
+      >
         <IonList lines="none" className="k-menu">
           <IonItem
             button
@@ -140,8 +154,8 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
             button
             detail={false}
             onClick={() => {
+              renameAfterMenu.current = true;
               menu.close();
-              setIsRenaming(true);
             }}
           >
             <IonIcon slot="start" icon={createOutline} />

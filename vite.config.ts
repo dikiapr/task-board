@@ -1,8 +1,6 @@
-/// <reference types="vitest" />
-
 import legacy from '@vitejs/plugin-legacy'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +12,11 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: ['src/__tests__/**', 'src/types/**', 'src/setupTests.ts', 'src/main.tsx', 'src/vite-env.d.ts'],
+      reporter: ['text', 'html'],
+    },
   }
 })

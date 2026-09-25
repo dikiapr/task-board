@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Task } from '../types/task';
-import { EMPTY_FILTERS, filterTasks, isFilterActive } from './filterTasks';
+import type { Task } from '../../types/task';
+import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../../utils/filterTasks';
 
 const TODAY = '2026-09-24';
 
@@ -29,15 +29,15 @@ const tasks: Task[] = [
 const ids = (result: Task[]) => result.map((t) => t.id);
 
 describe('filterTasks', () => {
-  it('tanpa filter mengembalikan semua task', () => {
+  it('returns every task without filters', () => {
     expect(ids(filterTasks(tasks, EMPTY_FILTERS, TODAY))).toEqual(['a', 'b', 'c', 'd']);
   });
 
-  it('search mencocokkan judul dan deskripsi tanpa peduli huruf besar/kecil', () => {
+  it('search matches title and description case-insensitively', () => {
     expect(ids(filterTasks(tasks, { ...EMPTY_FILTERS, search: '  login ' }, TODAY))).toEqual(['a', 'b']);
   });
 
-  it('filter assignee mengembalikan task yang punya salah satu assignee terpilih', () => {
+  it('the assignee filter returns tasks with any selected assignee', () => {
     expect(ids(filterTasks(tasks, { ...EMPTY_FILTERS, assigneeIds: ['m3', 'm2'] }, TODAY))).toEqual(['b', 'c']);
   });
 
@@ -47,13 +47,13 @@ describe('filterTasks', () => {
 
   it('filter due date', () => {
     const due = (d: typeof EMPTY_FILTERS.due) => ids(filterTasks(tasks, { ...EMPTY_FILTERS, due: d }, TODAY));
-    expect(due('overdue')).toEqual(['a']); // task di Done tidak dihitung terlambat
+    expect(due('overdue')).toEqual(['a']); // tasks in Done never count as overdue
     expect(due('today')).toEqual(['b']);
     expect(due('week')).toEqual(['b', 'c']);
     expect(due('none')).toEqual([]);
   });
 
-  it('beberapa filter digabung dengan logika AND', () => {
+  it('combines multiple filters with AND', () => {
     const result = filterTasks(tasks, { ...EMPTY_FILTERS, assigneeIds: ['m1'], labels: ['Feature'] }, TODAY);
     expect(ids(result)).toEqual(['a']);
   });
