@@ -1,20 +1,19 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ionic/react';
 import {
   closeCircle,
   cloudDownloadOutline,
   cloudUploadOutline,
-  personAddOutline,
   searchOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
 import { MEMBERS } from '../../data/constants';
 import type { TaskFilters } from '../../utils/filterTasks';
 import AvatarStack from '../avatar/AvatarStack';
-import MemberAvatar from '../avatar/MemberAvatar';
 import Button from '../button/Button';
 import { usePopover } from '../../hooks/usePopover';
 import FilterMenu from './FilterMenu';
+import InviteMenu from './InviteMenu';
 import WorkspaceMenu from './WorkspaceMenu';
 import './header.css';
 
@@ -37,22 +36,17 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
   onImport,
   onReset,
 }) => {
-  const inviteMenu = usePopover();
   const transferMenu = usePopover();
   const importInput = useRef<HTMLInputElement>(null);
-  const [email, setEmail] = useState('');
 
   const setSearch = (search: string) => onFiltersChange({ ...filters, search });
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   return (
     <header className="k-header">
       <div className="k-header__group">
         <WorkspaceMenu onReset={onReset} />
         <AvatarStack memberIds={MEMBERS.map((m) => m.id)} max={4} size="md" />
-        <Button variant="soft" icon={personAddOutline} onClick={inviteMenu.open}>
-          Invite
-        </Button>
+        <InviteMenu onInvite={onInvite} />
       </div>
 
       <div className="k-header__group k-header__group--end">
@@ -76,43 +70,6 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
           )}
         </label>
       </div>
-
-      {/* ---------- Invite ---------- */}
-      <IonPopover {...inviteMenu.props} className="k-popover k-popover--wide">
-        <div className="k-pop">
-          <h3 className="k-pop__title">Team members</h3>
-          <ul className="k-member-list">
-            {MEMBERS.map((m) => (
-              <li key={m.id}>
-                <MemberAvatar member={m} size="md" />
-                <span>{m.name}</span>
-              </li>
-            ))}
-          </ul>
-          <form
-            className="k-pop__row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!emailValid) return;
-              onInvite(email.trim());
-              setEmail('');
-              inviteMenu.close();
-            }}
-          >
-            <input
-              className="k-input"
-              type="email"
-              placeholder="name@company.com"
-              aria-label="Email to invite"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Button type="submit" variant="primary" disabled={!emailValid}>
-              Invite
-            </Button>
-          </form>
-        </div>
-      </IonPopover>
 
       {/* ---------- Export / Import ---------- */}
       <IonPopover {...transferMenu.props} className="k-popover">
