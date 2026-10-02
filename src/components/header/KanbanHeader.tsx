@@ -1,24 +1,21 @@
 import { useRef, useState } from 'react';
 import { IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ionic/react';
 import {
-  checkmark,
-  chevronDown,
   closeCircle,
   cloudDownloadOutline,
   cloudUploadOutline,
-  lockClosedOutline,
   personAddOutline,
-  refreshOutline,
   searchOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
-import { BOARD_NAME, MEMBERS } from '../../data/constants';
+import { MEMBERS } from '../../data/constants';
 import type { TaskFilters } from '../../utils/filterTasks';
 import AvatarStack from '../avatar/AvatarStack';
 import MemberAvatar from '../avatar/MemberAvatar';
 import Button from '../button/Button';
 import { usePopover } from '../../hooks/usePopover';
 import FilterMenu from './FilterMenu';
+import WorkspaceMenu from './WorkspaceMenu';
 import './header.css';
 
 interface KanbanHeaderProps {
@@ -40,7 +37,6 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
   onImport,
   onReset,
 }) => {
-  const workspaceMenu = usePopover();
   const inviteMenu = usePopover();
   const transferMenu = usePopover();
   const importInput = useRef<HTMLInputElement>(null);
@@ -52,11 +48,7 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
   return (
     <header className="k-header">
       <div className="k-header__group">
-        <button type="button" className="k-workspace" onClick={workspaceMenu.open}>
-          <IonIcon icon={lockClosedOutline} aria-hidden="true" />
-          <span>{BOARD_NAME}</span>
-          <IonIcon icon={chevronDown} aria-hidden="true" />
-        </button>
+        <WorkspaceMenu onReset={onReset} />
         <AvatarStack memberIds={MEMBERS.map((m) => m.id)} max={4} size="md" />
         <Button variant="soft" icon={personAddOutline} onClick={inviteMenu.open}>
           Invite
@@ -84,27 +76,6 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
           )}
         </label>
       </div>
-
-      {/* ---------- Workspace ---------- */}
-      <IonPopover {...workspaceMenu.props} className="k-popover">
-        <IonList lines="none" className="k-menu">
-          <IonItem lines="none">
-            <IonIcon slot="start" icon={checkmark} color="primary" />
-            <IonLabel>{BOARD_NAME}</IonLabel>
-          </IonItem>
-          <IonItem
-            button
-            detail={false}
-            onClick={() => {
-              workspaceMenu.close();
-              onReset();
-            }}
-          >
-            <IonIcon slot="start" icon={refreshOutline} />
-            <IonLabel>Reset to sample data</IonLabel>
-          </IonItem>
-        </IonList>
-      </IonPopover>
 
       {/* ---------- Invite ---------- */}
       <IonPopover {...inviteMenu.props} className="k-popover k-popover--wide">

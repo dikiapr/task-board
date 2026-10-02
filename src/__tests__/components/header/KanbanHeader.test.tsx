@@ -71,13 +71,6 @@ describe('KanbanHeader', () => {
   });
 
   describe('menu', () => {
-    it('"Reset to sample data" calls onReset', async () => {
-      const { onReset } = renderHeader();
-      await userEvent.click(screen.getByRole('button', { name: 'Adhivasindo' }));
-      await userEvent.click(await screen.findByText('Reset to sample data'));
-      expect(onReset).toHaveBeenCalled();
-    });
-
     it('"Export as JSON" calls onExport', async () => {
       const { onExport } = renderHeader();
       await userEvent.click(screen.getByRole('button', { name: 'Export / Import' }));
