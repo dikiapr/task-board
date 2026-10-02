@@ -1,35 +1,15 @@
 import type { Member } from '../../types/task';
 import { getMember } from '../../data/constants';
+import MemberAvatar, { type AvatarSize } from './MemberAvatar';
 import './avatar.css';
-
-const initials = (name: string) =>
-  name
-    .split(' ')
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-
-type Size = 'sm' | 'md';
-
-export const MemberAvatar: React.FC<{ member: Member; size?: Size }> = ({ member, size = 'sm' }) => (
-  <span
-    className={`k-avatar k-avatar--${size}`}
-    style={{ backgroundColor: member.color }}
-    title={member.name}
-    aria-label={member.name}
-  >
-    {initials(member.name)}
-  </span>
-);
 
 interface AvatarStackProps {
   memberIds: string[];
   max?: number;
-  size?: Size;
+  size?: AvatarSize;
 }
 
-export const AvatarStack: React.FC<AvatarStackProps> = ({ memberIds, max = 3, size = 'sm' }) => {
+const AvatarStack: React.FC<AvatarStackProps> = ({ memberIds, max = 3, size = 'sm' }) => {
   const members = memberIds.map(getMember).filter((m): m is Member => Boolean(m));
   if (members.length === 0) return null;
 
@@ -52,3 +32,5 @@ export const AvatarStack: React.FC<AvatarStackProps> = ({ memberIds, max = 3, si
     </span>
   );
 };
+
+export default AvatarStack;

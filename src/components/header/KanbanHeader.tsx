@@ -16,7 +16,8 @@ import {
 import type { LabelType } from '../../types/task';
 import { BOARD_NAME, LABELS, MEMBERS } from '../../data/constants';
 import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../utils/filterTasks';
-import { AvatarStack, MemberAvatar } from '../avatar/Avatar';
+import AvatarStack from '../avatar/AvatarStack';
+import MemberAvatar from '../avatar/MemberAvatar';
 import Button from '../button/Button';
 import LabelPill from '../label/LabelPill';
 import { usePopover } from '../../hooks/usePopover';

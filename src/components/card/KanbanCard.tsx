@@ -3,7 +3,7 @@ import { attachOutline, checkboxOutline, flag, timeOutline } from 'ionicons/icon
 import type { Task } from '../../types/task';
 import { DONE_COLUMN_ID, PRIORITY_COLORS } from '../../data/constants';
 import { formatShortDate, getDueStatus } from '../../utils/date';
-import { AvatarStack } from '../avatar/Avatar';
+import AvatarStack from '../avatar/AvatarStack';
 import LabelPill from '../label/LabelPill';
 import ProgressBar from '../progress/ProgressBar';
 import './card.css';
