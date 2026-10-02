@@ -6,36 +6,20 @@ import {
   closeCircle,
   cloudDownloadOutline,
   cloudUploadOutline,
-  funnelOutline,
   lockClosedOutline,
   personAddOutline,
   refreshOutline,
   searchOutline,
   swapHorizontalOutline,
 } from 'ionicons/icons';
-import type { LabelType } from '../../types/task';
-import { BOARD_NAME, LABELS, MEMBERS } from '../../data/constants';
-import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../utils/filterTasks';
+import { BOARD_NAME, MEMBERS } from '../../data/constants';
+import type { TaskFilters } from '../../utils/filterTasks';
 import AvatarStack from '../avatar/AvatarStack';
 import MemberAvatar from '../avatar/MemberAvatar';
 import Button from '../button/Button';
-import LabelPill from '../label/LabelPill';
 import { usePopover } from '../../hooks/usePopover';
+import FilterMenu from './FilterMenu';
 import './header.css';
-
-const DUE_OPTIONS: { value: DueFilter; label: string }[] = [
-  { value: 'all', label: 'Any time' },
-  { value: 'overdue', label: 'Overdue' },
-  { value: 'today', label: 'Due today' },
-  { value: 'week', label: 'Next 7 days' },
-  { value: 'none', label: 'No due date' },
-];
-
-const countActiveFilters = (f: TaskFilters) =>
-  f.assigneeIds.length + f.labels.length + (f.due === 'all' ? 0 : 1);
-
-const toggle = <T,>(list: T[], value: T) =>
-  list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
 interface KanbanHeaderProps {
   filters: TaskFilters;
@@ -58,14 +42,11 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
 }) => {
   const workspaceMenu = usePopover();
   const inviteMenu = usePopover();
-  const filterMenu = usePopover();
   const transferMenu = usePopover();
   const importInput = useRef<HTMLInputElement>(null);
   const [email, setEmail] = useState('');
 
-  const set = <K extends keyof TaskFilters>(key: K, value: TaskFilters[K]) =>
-    onFiltersChange({ ...filters, [key]: value });
-  const activeCount = countActiveFilters(filters);
+  const setSearch = (search: string) => onFiltersChange({ ...filters, search });
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   return (
@@ -83,15 +64,7 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
       </div>
 
       <div className="k-header__group k-header__group--end">
-        <Button
-          variant="ghost"
-          icon={funnelOutline}
-          className={activeCount > 0 ? 'is-active' : undefined}
-          onClick={filterMenu.open}
-        >
-          Filter
-          {activeCount > 0 && <span className="k-badge">{activeCount}</span>}
-        </Button>
+        <FilterMenu filters={filters} onFiltersChange={onFiltersChange} resultCount={resultCount} />
         <Button variant="ghost" icon={swapHorizontalOutline} onClick={transferMenu.open}>
           <span className="k-hide-sm">Export / Import</span>
         </Button>
@@ -102,10 +75,10 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
             placeholder="Search Tasks"
             aria-label="Search tasks"
             value={filters.search}
-            onChange={(e) => set('search', e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
           {filters.search && (
-            <button type="button" className="k-search__clear" onClick={() => set('search', '')} aria-label="Clear search">
+            <button type="button" className="k-search__clear" onClick={() => setSearch('')} aria-label="Clear search">
               <IonIcon icon={closeCircle} aria-hidden="true" />
             </button>
           )}
@@ -167,81 +140,6 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
               Invite
             </Button>
           </form>
-        </div>
-      </IonPopover>
-
-      {/* ---------- Filter ---------- */}
-      <IonPopover {...filterMenu.props} className="k-popover k-popover--wide">
-        <div className="k-pop">
-          <div className="k-pop__header">
-            <h3 className="k-pop__title">Filter tasks</h3>
-            <span className="k-muted">{resultCount} shown</span>
-          </div>
-
-          <p className="k-pop__label">Assignee</p>
-          <div className="k-chips">
-            {MEMBERS.map((m) => {
-              const selected = filters.assigneeIds.includes(m.id);
-              return (
-                <button
-                  key={m.id}
-                  type="button"
-                  className={`k-chip${selected ? ' is-selected' : ''}`}
-                  aria-pressed={selected}
-                  onClick={() => set('assigneeIds', toggle(filters.assigneeIds, m.id))}
-                >
-                  <MemberAvatar member={m} />
-                  {m.name.split(' ')[0]}
-                </button>
-              );
-            })}
-          </div>
-
-          <p className="k-pop__label">Label</p>
-          <div className="k-chips">
-            {LABELS.map((l: LabelType) => {
-              const selected = filters.labels.includes(l);
-              return (
-                <button
-                  key={l}
-                  type="button"
-                  className={`k-chip${selected ? ' is-selected' : ''}`}
-                  aria-pressed={selected}
-                  onClick={() => set('labels', toggle(filters.labels, l))}
-                >
-                  <LabelPill label={l} />
-                </button>
-              );
-            })}
-          </div>
-
-          <p className="k-pop__label">Due date</p>
-          <div className="k-chips">
-            {DUE_OPTIONS.map((o) => (
-              <button
-                key={o.value}
-                type="button"
-                className={`k-chip${filters.due === o.value ? ' is-selected' : ''}`}
-                aria-pressed={filters.due === o.value}
-                onClick={() => set('due', o.value)}
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="k-pop__footer">
-            <Button
-              variant="ghost"
-              disabled={activeCount === 0 && !filters.search}
-              onClick={() => onFiltersChange(EMPTY_FILTERS)}
-            >
-              Clear all
-            </Button>
-            <Button variant="primary" onClick={filterMenu.close}>
-              Done
-            </Button>
-          </div>
         </div>
       </IonPopover>
 
