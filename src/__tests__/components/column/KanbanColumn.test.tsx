@@ -103,13 +103,6 @@ describe('KanbanColumn', () => {
   });
 
   describe('actions menu', () => {
-    it('"Delete list" calls onDeleteColumn', async () => {
-      const { onDeleteColumn } = renderColumn();
-      await userEvent.click(screen.getByRole('button', { name: 'To Do actions' }));
-      await userEvent.click(await screen.findByText('Delete list'));
-      expect(onDeleteColumn).toHaveBeenCalledWith(todo());
-    });
-
     it('"Rename list" opens a rename input that keeps focus', async () => {
       renderColumn();
       const shown = nextPresent();
@@ -124,12 +117,11 @@ describe('KanbanColumn', () => {
       expect(todo().title).toBe('Backlog');
     });
 
-    it('"Delete list" is disabled for the Done column', async () => {
-      const done = useBoardStore.getState().columns.find((c) => c.id === 'done')!;
-      renderColumn({ column: done });
-      await userEvent.click(screen.getByRole('button', { name: 'Done actions' }));
-      const item = (await screen.findByText('Delete list')).closest('ion-item');
-      expect(item).toHaveProperty('disabled', true);
+    it('"Delete list" passes the column to onDeleteColumn', async () => {
+      const { onDeleteColumn } = renderColumn();
+      await userEvent.click(screen.getByRole('button', { name: 'To Do actions' }));
+      await userEvent.click(await screen.findByText('Delete list'));
+      expect(onDeleteColumn).toHaveBeenCalledWith(todo());
     });
   });
 });

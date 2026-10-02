@@ -1,20 +1,12 @@
-import { useRef, useState } from 'react';
-import { IonIcon, IonItem, IonLabel, IonList, IonPopover } from '@ionic/react';
-import {
-  addOutline,
-  contractOutline,
-  createOutline,
-  ellipsisVertical,
-  expandOutline,
-  trashOutline,
-} from 'ionicons/icons';
+import { useState } from 'react';
+import { IonIcon } from '@ionic/react';
+import { addOutline, contractOutline, expandOutline } from 'ionicons/icons';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type { Column, ColumnId, Task } from '../../types/task';
-import { DONE_COLUMN_ID } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
 import SortableKanbanCard from '../card/SortableKanbanCard';
-import { usePopover } from '../../hooks/usePopover';
+import ColumnActionsMenu from './ColumnActionsMenu';
 import './column.css';
 
 interface KanbanColumnProps {
@@ -38,9 +30,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 }) => {
   const renameColumn = useBoardStore((s) => s.renameColumn);
   const toggleCollapsed = useBoardStore((s) => s.toggleColumnCollapsed);
-  const menu = usePopover();
   const [isRenaming, setIsRenaming] = useState(false);
-  const renameAfterMenu = useRef(false);
 
   const { setNodeRef } = useDroppable({ id: column.id, data: { type: 'column' } });
 
@@ -98,9 +88,12 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         >
           <IonIcon icon={addOutline} aria-hidden="true" />
         </button>
-        <button type="button" className="k-icon-btn" onClick={menu.open} aria-label={`${column.title} actions`}>
-          <IonIcon icon={ellipsisVertical} aria-hidden="true" />
-        </button>
+        <ColumnActionsMenu
+          column={column}
+          onAddTask={() => onAddTask(column.id)}
+          onRename={() => setIsRenaming(true)}
+          onDelete={() => onDeleteColumn(column)}
+        />
         <button
           type="button"
           className="k-icon-btn k-column__collapse"
@@ -123,58 +116,6 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
           <p className="k-column__empty">{isFiltering ? 'No matching tasks' : 'Drop tasks here'}</p>
         )}
       </div>
-
-      <IonPopover
-        {...menu.props}
-        className="k-popover"
-        alignment="end"
-        onDidDismiss={() => {
-          menu.props.onDidDismiss();
-          // Start renaming only once the menu is gone: while it is still open its focus
-          // trap pulls focus back, blurring the rename input and closing it right away.
-          if (renameAfterMenu.current) {
-            renameAfterMenu.current = false;
-            setIsRenaming(true);
-          }
-        }}
-      >
-        <IonList lines="none" className="k-menu">
-          <IonItem
-            button
-            detail={false}
-            onClick={() => {
-              menu.close();
-              onAddTask(column.id);
-            }}
-          >
-            <IonIcon slot="start" icon={addOutline} />
-            <IonLabel>Add task</IonLabel>
-          </IonItem>
-          <IonItem
-            button
-            detail={false}
-            onClick={() => {
-              renameAfterMenu.current = true;
-              menu.close();
-            }}
-          >
-            <IonIcon slot="start" icon={createOutline} />
-            <IonLabel>Rename list</IonLabel>
-          </IonItem>
-          <IonItem
-            button
-            detail={false}
-            disabled={column.id === DONE_COLUMN_ID}
-            onClick={() => {
-              menu.close();
-              onDeleteColumn(column);
-            }}
-          >
-            <IonIcon slot="start" icon={trashOutline} color="danger" />
-            <IonLabel color="danger">Delete list</IonLabel>
-          </IonItem>
-        </IonList>
-      </IonPopover>
     </section>
   );
 };
