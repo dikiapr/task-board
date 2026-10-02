@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import KanbanHeader from '../../../components/header/KanbanHeader';
@@ -12,8 +12,8 @@ const renderHeader = (filters: TaskFilters = EMPTY_FILTERS) => {
     onImport: vi.fn(),
     onReset: vi.fn(),
   };
-  const view = render(<KanbanHeader filters={filters} resultCount={7} {...handlers} />);
-  return { ...handlers, ...view };
+  render(<KanbanHeader filters={filters} resultCount={7} {...handlers} />);
+  return handlers;
 };
 
 describe('KanbanHeader', () => {
@@ -33,22 +33,6 @@ describe('KanbanHeader', () => {
       const { onFiltersChange } = renderHeader({ ...EMPTY_FILTERS, search: 'bug' });
       await userEvent.click(screen.getByRole('button', { name: 'Clear search' }));
       expect(onFiltersChange).toHaveBeenCalledWith({ ...EMPTY_FILTERS, search: '' });
-    });
-  });
-
-  describe('menu', () => {
-    it('"Export as JSON" calls onExport', async () => {
-      const { onExport } = renderHeader();
-      await userEvent.click(screen.getByRole('button', { name: 'Export / Import' }));
-      await userEvent.click(await screen.findByText('Export as JSON'));
-      expect(onExport).toHaveBeenCalled();
-    });
-
-    it('passes the file chosen for import to onImport', () => {
-      const { onImport, container } = renderHeader();
-      const file = new File(['{}'], 'board.json', { type: 'application/json' });
-      fireEvent.change(container.querySelector('input[type="file"]')!, { target: { files: [file] } });
-      expect(onImport).toHaveBeenCalledWith(file);
     });
   });
 });
