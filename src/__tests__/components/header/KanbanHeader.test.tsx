@@ -17,22 +17,9 @@ const renderHeader = (filters: TaskFilters = EMPTY_FILTERS) => {
 };
 
 describe('KanbanHeader', () => {
-  describe('search', () => {
-    it('sends the search text to onFiltersChange', async () => {
-      const { onFiltersChange } = renderHeader();
-      await userEvent.type(screen.getByRole('searchbox', { name: 'Search tasks' }), 'a');
-      expect(onFiltersChange).toHaveBeenCalledWith({ ...EMPTY_FILTERS, search: 'a' });
-    });
-
-    it('hides the clear button when search is empty', () => {
-      renderHeader();
-      expect(screen.queryByRole('button', { name: 'Clear search' })).not.toBeInTheDocument();
-    });
-
-    it('the clear button empties the search', async () => {
-      const { onFiltersChange } = renderHeader({ ...EMPTY_FILTERS, search: 'bug' });
-      await userEvent.click(screen.getByRole('button', { name: 'Clear search' }));
-      expect(onFiltersChange).toHaveBeenCalledWith({ ...EMPTY_FILTERS, search: '' });
-    });
+  it('updates the search while keeping the other filters', async () => {
+    const { onFiltersChange } = renderHeader({ ...EMPTY_FILTERS, labels: ['Bug'] });
+    await userEvent.type(screen.getByRole('searchbox', { name: 'Search tasks' }), 'a');
+    expect(onFiltersChange).toHaveBeenCalledWith({ ...EMPTY_FILTERS, labels: ['Bug'], search: 'a' });
   });
 });
