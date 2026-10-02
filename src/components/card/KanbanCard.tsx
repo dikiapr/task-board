@@ -1,31 +1,12 @@
 import { IonIcon } from '@ionic/react';
 import { attachOutline, checkboxOutline, flag, timeOutline } from 'ionicons/icons';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import type { LabelType, Task } from '../../types/task';
+import type { Task } from '../../types/task';
 import { DONE_COLUMN_ID, PRIORITY_COLORS } from '../../data/constants';
 import { formatShortDate, getDueStatus } from '../../utils/date';
 import { AvatarStack } from '../avatar/Avatar';
+import LabelPill from '../label/LabelPill';
+import ProgressBar from '../progress/ProgressBar';
 import './card.css';
-
-export const LabelPill: React.FC<{ label: LabelType }> = ({ label }) => (
-  <span className={`k-label k-label--${label.toLowerCase()}`}>{label}</span>
-);
-
-export const ProgressBar: React.FC<{ done: number; total: number }> = ({ done, total }) => {
-  const percent = total === 0 ? 0 : Math.round((done / total) * 100);
-  return (
-    <div
-      className={`k-progress${total > 0 && done === total ? ' k-progress--complete' : ''}`}
-      role="progressbar"
-      aria-valuenow={percent}
-      aria-valuemin={0}
-      aria-valuemax={100}
-    >
-      <span style={{ width: `${percent}%` }} />
-    </div>
-  );
-};
 
 interface KanbanCardProps {
   task: Task;
@@ -87,35 +68,5 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ task, isOverlay }) => {
         </div>
       </div>
     </article>
-  );
-};
-
-interface SortableKanbanCardProps {
-  task: Task;
-  onOpen: (task: Task) => void;
-}
-
-export const SortableKanbanCard: React.FC<SortableKanbanCardProps> = ({ task, onOpen }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id: task.id,
-    data: { type: 'task' },
-  });
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={{ transform: CSS.Translate.toString(transform), transition }}
-      className={`k-sortable${isDragging ? ' k-sortable--dragging' : ''}`}
-      {...attributes}
-      {...listeners}
-      aria-label={`Task: ${task.title}`}
-      onClick={() => onOpen(task)}
-      onKeyDown={(e) => {
-        listeners?.onKeyDown?.(e);
-        if (e.key === 'Enter' && !isDragging) onOpen(task);
-      }}
-    >
-      <KanbanCard task={task} />
-    </div>
   );
 };

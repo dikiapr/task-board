@@ -1,0 +1,28 @@
+.k-progress {
+  overflow: hidden;
+  height: 3px;
+  border-radius: 999px;
+  background: #c9dcf6;
+}
+
+.k-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--k-primary);
+  transition: width 0.35s ease;
+}
+
+.k-progress--complete {
+  background: #cdebd9;
+}
+
+.k-progress--complete span {
+  background: #22a06b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-progress span {
+    transition: none;
+  }
+}

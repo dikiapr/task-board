@@ -18,7 +18,7 @@ import { BOARD_NAME, LABELS, MEMBERS } from '../../data/constants';
 import { EMPTY_FILTERS, type DueFilter, type TaskFilters } from '../../utils/filterTasks';
 import { AvatarStack, MemberAvatar } from '../avatar/Avatar';
 import Button from '../button/Button';
-import { LabelPill } from '../card/KanbanCard';
+import LabelPill from '../label/LabelPill';
 import { usePopover } from '../../hooks/usePopover';
 import './header.css';
 

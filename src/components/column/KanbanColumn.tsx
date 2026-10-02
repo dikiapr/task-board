@@ -13,7 +13,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { Column, ColumnId, Task } from '../../types/task';
 import { DONE_COLUMN_ID } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
-import { SortableKanbanCard } from '../card/KanbanCard';
+import SortableKanbanCard from '../card/SortableKanbanCard';
 import { usePopover } from '../../hooks/usePopover';
 import './column.css';
 

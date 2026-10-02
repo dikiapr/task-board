@@ -1,0 +1,30 @@
+.k-label {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.k-label--feature {
+  background: #dce8fb;
+  color: #2462bd;
+}
+
+.k-label--bug {
+  background: #fbdde3;
+  color: #bd2c4a;
+}
+
+.k-label--issue {
+  background: #fce6d2;
+  color: #9c5410;
+}
+
+.k-label--undefined {
+  padding-right: 0;
+  padding-left: 0;
+  color: var(--k-text);
+  font-weight: 700;
+}

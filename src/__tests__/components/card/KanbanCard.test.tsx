@@ -1,36 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { DndContext } from '@dnd-kit/core';
-import { SortableContext } from '@dnd-kit/sortable';
-import { KanbanCard, LabelPill, ProgressBar, SortableKanbanCard } from '../../../components/card/KanbanCard';
+import { KanbanCard } from '../../../components/card/KanbanCard';
 import { makeTask } from '../../fixtures';
-
-describe('LabelPill', () => {
-  it('applies the label class', () => {
-    render(<LabelPill label="Bug" />);
-    expect(screen.getByText('Bug')).toHaveClass('k-label', 'k-label--bug');
-  });
-});
-
-describe('ProgressBar', () => {
-  it('computes the percentage from done/total', () => {
-    render(<ProgressBar done={1} total={3} />);
-    const bar = screen.getByRole('progressbar');
-    expect(bar).toHaveAttribute('aria-valuenow', '33');
-    expect(bar).not.toHaveClass('k-progress--complete');
-  });
-
-  it('is 0 when total is 0', () => {
-    render(<ProgressBar done={0} total={0} />);
-    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '0');
-  });
-
-  it('gets the complete class when everything is done', () => {
-    render(<ProgressBar done={2} total={2} />);
-    expect(screen.getByRole('progressbar')).toHaveClass('k-progress--complete');
-  });
-});
 
 describe('KanbanCard', () => {
   beforeEach(() => {
@@ -95,31 +66,5 @@ describe('KanbanCard', () => {
     const { container } = render(<KanbanCard task={makeTask({ coverImage: '/covers/cover-1.jpg' })} isOverlay />);
     expect(container.querySelector('.k-card__cover')).toHaveAttribute('src', '/covers/cover-1.jpg');
     expect(container.querySelector('.k-card')).toHaveClass('k-card--overlay');
-  });
-});
-
-describe('SortableKanbanCard', () => {
-  const renderSortable = (onOpen = vi.fn()) => {
-    const task = makeTask({ title: 'Design' });
-    render(
-      <DndContext sensors={[]}>
-        <SortableContext items={[task.id]}>
-          <SortableKanbanCard task={task} onOpen={onOpen} />
-        </SortableContext>
-      </DndContext>,
-    );
-    return { task, onOpen, card: screen.getByLabelText('Task: Design') };
-  };
-
-  it('opens the task on click', async () => {
-    const { task, onOpen, card } = renderSortable();
-    await userEvent.click(card);
-    expect(onOpen).toHaveBeenCalledWith(task);
-  });
-
-  it('opens the task on Enter', () => {
-    const { task, onOpen, card } = renderSortable();
-    fireEvent.keyDown(card, { key: 'Enter' });
-    expect(onOpen).toHaveBeenCalledWith(task);
   });
 });

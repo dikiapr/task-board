@@ -4,7 +4,7 @@ import { add, closeOutline } from 'ionicons/icons';
 import { nanoid } from 'nanoid';
 import type { Subtask } from '../../types/task';
 import Button from '../button/Button';
-import { ProgressBar } from '../card/KanbanCard';
+import ProgressBar from '../progress/ProgressBar';
 
 interface ChecklistFieldProps {
   value: Subtask[];
