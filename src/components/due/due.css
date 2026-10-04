@@ -1,0 +1,21 @@
+.k-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #d6e6f8;
+  color: #245ea3;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.k-due--overdue {
+  background: #fde2e4;
+  color: #b42a44;
+}
+
+.k-due--today {
+  background: #fdebd3;
+  color: #94500d;
+}

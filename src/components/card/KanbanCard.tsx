@@ -1,9 +1,9 @@
 import { IonIcon } from '@ionic/react';
-import { attachOutline, checkboxOutline, timeOutline } from 'ionicons/icons';
+import { attachOutline, checkboxOutline } from 'ionicons/icons';
 import type { Task } from '../../types/task';
 import { DONE_COLUMN_ID } from '../../data/constants';
-import { formatShortDate, getDueStatus } from '../../utils/date';
 import AvatarStack from '../avatar/AvatarStack';
+import DueBadge from '../due/DueBadge';
 import LabelPill from '../label/LabelPill';
 import PriorityFlag from '../priority/PriorityFlag';
 import ProgressBar from '../progress/ProgressBar';
@@ -17,7 +17,6 @@ interface KanbanCardProps {
 export const KanbanCard: React.FC<KanbanCardProps> = ({ task, isOverlay }) => {
   const doneCount = task.subtasks.filter((s) => s.done).length;
   const total = task.subtasks.length;
-  const dueStatus = task.columnId === DONE_COLUMN_ID ? 'none' : getDueStatus(task.dueDate);
 
   return (
     <article className={`k-card${isOverlay ? ' k-card--overlay' : ''}`}>
@@ -37,12 +36,7 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ task, isOverlay }) => {
 
         <div className="k-card__footer">
           <div className="k-card__meta">
-            {task.dueDate && (
-              <span className={`k-due k-due--${dueStatus}`} title="Due date">
-                <IonIcon icon={timeOutline} aria-hidden="true" />
-                {formatShortDate(task.dueDate)}
-              </span>
-            )}
+            {task.dueDate && <DueBadge date={task.dueDate} isDone={task.columnId === DONE_COLUMN_ID} />}
             {total > 0 && (
               <span className="k-meta" title="Checklist">
                 <IonIcon icon={checkboxOutline} aria-hidden="true" />
