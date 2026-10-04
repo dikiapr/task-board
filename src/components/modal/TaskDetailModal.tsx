@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState, type SetStateAction } from 'react';
 import { IonContent, IonIcon, IonModal, useIonAlert } from '@ionic/react';
 import { pencil, trashOutline } from 'ionicons/icons';
-import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../types/task';
-import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../data/constants';
+import type { ColumnId, Task, TaskInput } from '../../types/task';
+import { DONE_COLUMN_ID } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
 import Button from '../button/Button';
 import ActivityList from './ActivityList';
-import AssigneeField from './AssigneeField';
 import AttachmentsField from './AttachmentsField';
 import ChecklistField from './ChecklistField';
 import CoverImageField from './CoverImageField';
 import DetailTopbar from './DetailTopbar';
-import DueDateField from './DueDateField';
+import TaskInfoSection from './TaskInfoSection';
 import './modal.css';
 
 export type EditorState = { mode: 'create'; columnId: ColumnId } | { mode: 'edit'; taskId: string };
@@ -180,95 +179,14 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
       <IonContent className="k-detail__content">
         <CoverImageField value={draft.coverImage} onChange={(v) => update('coverImage', v)} />
 
-        <section className="k-detail__section">
-          {isEditingTitle ? (
-            <input
-              className="k-title-input"
-              placeholder="Task title"
-              aria-label="Task title"
-              value={draft.title}
-              autoFocus
-              onChange={(e) => update('title', e.target.value)}
-              onBlur={() => draft.title.trim() && setIsEditingTitle(false)}
-              onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
-            />
-          ) : (
-            <h2 className="k-detail__title">
-              <span>{draft.title}</span>
-              <button type="button" className="k-icon-btn" onClick={() => setIsEditingTitle(true)} aria-label="Edit title">
-                <IonIcon icon={pencil} aria-hidden="true" />
-              </button>
-            </h2>
-          )}
-          {showTitleError && !draft.title.trim() && <p className="k-error">Title is required</p>}
-
-          <div className="k-detail__grid">
-            <div className="k-field">
-              <span className="k-field__label">Assignee</span>
-              <AssigneeField
-                value={draft.assigneeIds}
-                onToggle={(memberId) =>
-                  update('assigneeIds', (ids) =>
-                    ids.includes(memberId) ? ids.filter((id) => id !== memberId) : [...ids, memberId],
-                  )
-                }
-              />
-            </div>
-            <div className="k-field">
-              <span className="k-field__label">Due Date</span>
-              <DueDateField value={draft.dueDate} onChange={(v) => update('dueDate', v)} />
-            </div>
-            <label className="k-field">
-              <span className="k-field__label">Board</span>
-              <select className="k-select" value={BOARD_NAME} onChange={() => undefined}>
-                <option>{BOARD_NAME}</option>
-              </select>
-            </label>
-            <label className="k-field">
-              <span className="k-field__label">Column</span>
-              <select
-                className="k-select"
-                value={draft.columnId}
-                onChange={(e) => update('columnId', e.target.value)}
-              >
-                {columns.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.title}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="k-field">
-              <span className="k-field__label">Label</span>
-              <select
-                className="k-select"
-                value={draft.label}
-                onChange={(e) => update('label', e.target.value as LabelType)}
-              >
-                {LABELS.map((l) => (
-                  <option key={l} value={l}>
-                    {l}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="k-field">
-              <span className="k-field__label">Priority</span>
-              <select
-                className="k-select"
-                value={draft.priority ?? ''}
-                onChange={(e) => update('priority', (e.target.value || undefined) as Priority | undefined)}
-              >
-                <option value="">None</option>
-                {PRIORITIES.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </section>
+        <TaskInfoSection
+          draft={draft}
+          update={update}
+          columns={columns}
+          isEditingTitle={isEditingTitle}
+          onEditingTitleChange={setIsEditingTitle}
+          showTitleError={showTitleError}
+        />
 
         <section className="k-detail__section">
           <h3 className="k-detail__heading">Description</h3>
