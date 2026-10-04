@@ -26,6 +26,8 @@ describe('useToast', () => {
     expect(present).toHaveBeenCalledWith(
       expect.objectContaining({
         message: 'Task created',
+        position: 'top',
+        positionAnchor: 'kanban-header',
         cssClass: 'k-toast',
         icon: checkmarkCircleOutline,
         buttons: undefined,

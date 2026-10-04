@@ -2,6 +2,9 @@ import type { Column, LabelType, Member, Priority } from '../types/task';
 
 export const BOARD_NAME = 'Adhivasindo';
 
+/** Toasts are anchored below the header so they never cover its buttons. */
+export const HEADER_ID = 'kanban-header';
+
 export const DEFAULT_COLUMNS: Column[] = [
   { id: 'todo', title: 'To Do', color: '#64748b' },
   { id: 'doing', title: 'Doing', color: '#3b82f6' },

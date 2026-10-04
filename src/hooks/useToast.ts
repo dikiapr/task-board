@@ -1,5 +1,6 @@
 import { useIonToast } from '@ionic/react';
 import { checkmarkCircleOutline } from 'ionicons/icons';
+import { HEADER_ID } from '../data/constants';
 
 interface ToastOptions {
   icon?: string;
@@ -15,7 +16,8 @@ export const useToast = () => {
     return presentToast({
       message,
       duration: 2500,
-      position: 'bottom',
+      position: 'top',
+      positionAnchor: HEADER_ID,
       cssClass: 'k-toast',
       icon: options.icon ?? checkmarkCircleOutline,
       color: options.color,

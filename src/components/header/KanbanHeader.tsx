@@ -1,4 +1,4 @@
-import { MEMBERS } from '../../data/constants';
+import { HEADER_ID, MEMBERS } from '../../data/constants';
 import type { ExportFormat } from '../../utils/exportImport';
 import type { TaskFilters } from '../../utils/filterTasks';
 import AvatarStack from '../avatar/AvatarStack';
@@ -31,7 +31,7 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
   const setSearch = (search: string) => onFiltersChange({ ...filters, search });
 
   return (
-    <header className="k-header">
+    <header id={HEADER_ID} className="k-header">
       <div className="k-header__group">
         <WorkspaceMenu onReset={onReset} />
         <AvatarStack memberIds={MEMBERS.map((m) => m.id)} max={4} size="md" />
