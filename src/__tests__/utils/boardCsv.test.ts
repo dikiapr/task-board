@@ -26,6 +26,7 @@ describe('boardToCsv', () => {
           priority: 'High',
           dueDate: '2026-10-05',
           assigneeIds: ['m1', 'm2', 'unknown'],
+          coverImage: '/covers/cover-1.jpg',
           subtasks: [
             { id: 's1', title: 'Reproduce', done: true },
             { id: 's2', title: 'Patch', done: false },
@@ -36,7 +37,7 @@ describe('boardToCsv', () => {
 
     expect(csv.startsWith('\uFEFF')).toBe(true);
     expect(rowsOf(csv)).toEqual([
-      ['List', 'Title', 'Description', 'Label', 'Priority', 'Due Date', 'Assignees', 'Checklist'],
+      ['List', 'Title', 'Description', 'Label', 'Priority', 'Due Date', 'Assignees', 'Checklist', 'Cover'],
       [
         'To Do',
         'Fix login',
@@ -46,9 +47,20 @@ describe('boardToCsv', () => {
         '2026-10-05',
         'Andi Pratama; Budi Santoso',
         '[x] Reproduce\n[ ] Patch',
+        '/covers/cover-1.jpg',
       ],
-      ['QA', 'In QA', '', 'Undefined', '', '', '', ''],
+      ['QA', 'In QA', '', 'Undefined', '', '', '', '', ''],
     ]);
+  });
+
+  it('leaves out an uploaded cover too long for a spreadsheet cell', () => {
+    const small = `data:image/jpeg;base64,${'A'.repeat(100)}`;
+    const huge = `data:image/jpeg;base64,${'A'.repeat(40000)}`;
+    const csv = boardToCsv({
+      columns,
+      tasks: [makeTask({ id: 'a', coverImage: small }), makeTask({ id: 'b', coverImage: huge })],
+    });
+    expect(rowsOf(csv).slice(1).map((row) => row[8])).toEqual([small, '']);
   });
 
   it('escapes cells that a spreadsheet would run as a formula', () => {
@@ -66,6 +78,7 @@ describe('parseBoardCsv', () => {
       priority: 'Low',
       dueDate: '2026-10-05',
       assigneeIds: ['m3'],
+      coverImage: 'https://images.example.com/cover.jpg',
       subtasks: [{ id: 's1', title: 'Draft', done: true }],
     });
     const { tasks } = parseBoardCsv(boardToCsv({ columns: DEFAULT_COLUMNS, tasks: [task] }));
@@ -80,6 +93,7 @@ describe('parseBoardCsv', () => {
       dueDate: '2026-10-05',
       assigneeIds: ['m3'],
       subtasks: [{ title: 'Draft', done: true }],
+      coverImage: 'https://images.example.com/cover.jpg',
       attachments: [],
     });
   });
@@ -109,6 +123,28 @@ describe('parseBoardCsv', () => {
       assigneeIds: ['m1'],
       subtasks: [{ title: 'plain item', done: false }],
     });
+  });
+
+  it('only accepts covers that are sample paths, web URLs, or image data URLs', () => {
+    const covers = [
+      '/covers/cover-2.jpg',
+      'http://example.com/a.png',
+      'data:image/png;base64,iVBORw0KGgo=',
+      'javascript:alert(1)',
+      'data:text/html;base64,PHNjcmlwdD4=',
+      '/etc/passwd',
+      'not a url',
+    ];
+    const csv = ['Title,Cover', ...covers.map((c, i) => `T${i},"${c}"`)].join('\n');
+    expect(parseBoardCsv(csv).tasks.map((t) => t.coverImage)).toEqual([
+      '/covers/cover-2.jpg',
+      'http://example.com/a.png',
+      'data:image/png;base64,iVBORw0KGgo=',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    ]);
   });
 
   it('rejects a CSV without a Title column', () => {

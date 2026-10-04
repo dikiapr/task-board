@@ -6,12 +6,18 @@ import { createDefaultColumns } from '../data/seed';
 
 /**
  * One row per task. Lists, assignees, and the checklist are written as readable text
- * so the file can be edited in a spreadsheet; ids, attachments, covers, and activity
- * are not part of the CSV.
+ * so the file can be edited in a spreadsheet; ids, attachments, and activity are not
+ * part of the CSV.
  */
-const HEADERS = ['List', 'Title', 'Description', 'Label', 'Priority', 'Due Date', 'Assignees', 'Checklist'];
+const HEADERS = ['List', 'Title', 'Description', 'Label', 'Priority', 'Due Date', 'Assignees', 'Checklist', 'Cover'];
 
 const ASSIGNEE_SEPARATOR = '; ';
+
+/** Excel cuts off longer cells, which would break an uploaded cover's data URL. */
+const MAX_CELL_LENGTH = 32767;
+
+/** Sample covers, web images, and uploaded images (stored as data URLs). */
+const COVER_PATTERN = /^(\/covers\/[\w.-]+|https?:\/\/\S+|data:image\/(png|jpe?g|gif|webp);base64,[\w+/=]+)$/i;
 
 /** Excel opens UTF-8 CSV correctly only with a byte order mark. */
 const BOM = '\uFEFF';
@@ -30,6 +36,7 @@ export const boardToCsv = ({ columns, tasks }: BoardData): string => {
         t.dueDate ?? '',
         t.assigneeIds.map(memberName).filter(Boolean).join(ASSIGNEE_SEPARATOR),
         t.subtasks.map((s) => `[${s.done ? 'x' : ' '}] ${s.title}`).join('\n'),
+        t.coverImage && t.coverImage.length <= MAX_CELL_LENGTH ? t.coverImage : '',
       ]),
   );
   // escapeFormulae stops spreadsheet apps from running cells such as "=SUM(...)".
@@ -56,6 +63,11 @@ const parseAssignees = (value: string) =>
     .split(';')
     .map((name) => MEMBERS.find((m) => m.name.toLowerCase() === name.trim().toLowerCase())?.id)
     .filter((id): id is string => Boolean(id));
+
+const parseCover = (value: string) => {
+  const cover = value.trim();
+  return COVER_PATTERN.test(cover) ? cover : undefined;
+};
 
 const parseChecklist = (value: string): Subtask[] =>
   value
@@ -105,6 +117,7 @@ export const parseBoardCsv = (text: string): BoardData => {
       dueDate: parseDueDate(cell('duedate')),
       assigneeIds: parseAssignees(cell('assignees')),
       subtasks: parseChecklist(cell('checklist')),
+      coverImage: parseCover(cell('cover')),
       attachments: [],
       activity: [],
       createdAt: now,
