@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type SetStateAction } from 'react';
-import { IonContent, IonIcon, IonModal, useIonAlert } from '@ionic/react';
-import { pencil, trashOutline } from 'ionicons/icons';
+import { IonContent, IonModal, useIonAlert } from '@ionic/react';
+import { trashOutline } from 'ionicons/icons';
 import type { ColumnId, Task, TaskInput } from '../../types/task';
 import { DONE_COLUMN_ID } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
@@ -9,6 +9,7 @@ import ActivityList from './ActivityList';
 import AttachmentsField from './AttachmentsField';
 import ChecklistField from './ChecklistField';
 import CoverImageField from './CoverImageField';
+import DescriptionField from './DescriptionField';
 import DetailTopbar from './DetailTopbar';
 import TaskInfoSection from './TaskInfoSection';
 import './modal.css';
@@ -190,15 +191,7 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
 
         <section className="k-detail__section">
           <h3 className="k-detail__heading">Description</h3>
-          <div className="k-description">
-            <IonIcon icon={pencil} className="k-description__icon" aria-hidden="true" />
-            <textarea
-              aria-label="Description"
-              rows={3}
-              value={draft.description}
-              onChange={(e) => update('description', e.target.value)}
-            />
-          </div>
+          <DescriptionField value={draft.description} onChange={(v) => update('description', v)} />
         </section>
 
         <section className="k-detail__section">
