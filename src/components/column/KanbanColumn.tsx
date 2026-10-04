@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { IonIcon } from '@ionic/react';
-import { addOutline, contractOutline, expandOutline } from 'ionicons/icons';
+import { expandOutline } from 'ionicons/icons';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type { Column, ColumnId, Task } from '../../types/task';
 import { useBoardStore } from '../../store/useBoardStore';
 import SortableKanbanCard from '../card/SortableKanbanCard';
-import ColumnActionsMenu from './ColumnActionsMenu';
+import ColumnHeader from './ColumnHeader';
 import './column.css';
 
 interface KanbanColumnProps {
@@ -28,9 +27,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   onOpenTask,
   onDeleteColumn,
 }) => {
-  const renameColumn = useBoardStore((s) => s.renameColumn);
   const toggleCollapsed = useBoardStore((s) => s.toggleColumnCollapsed);
-  const [isRenaming, setIsRenaming] = useState(false);
 
   const { setNodeRef } = useDroppable({ id: column.id, data: { type: 'column' } });
 
@@ -55,55 +52,14 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
     );
   }
 
-  const commitRename = (value: string) => {
-    if (value.trim()) renameColumn(column.id, value);
-    setIsRenaming(false);
-  };
-
   return (
     <section className={className} aria-label={`List ${column.title}`}>
-      <header className="k-column__header">
-        {isRenaming ? (
-          <input
-            className="k-column__rename"
-            defaultValue={column.title}
-            aria-label="List name"
-            autoFocus
-            onBlur={(e) => commitRename(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') commitRename(e.currentTarget.value);
-              if (e.key === 'Escape') setIsRenaming(false);
-            }}
-          />
-        ) : (
-          <h2 className="k-column__title" onDoubleClick={() => setIsRenaming(true)}>
-            {column.title}
-          </h2>
-        )}
-        <button
-          type="button"
-          className="k-icon-btn k-icon-btn--add"
-          onClick={() => onAddTask(column.id)}
-          aria-label={`Add task to ${column.title}`}
-        >
-          <IonIcon icon={addOutline} aria-hidden="true" />
-        </button>
-        <ColumnActionsMenu
-          column={column}
-          onAddTask={() => onAddTask(column.id)}
-          onRename={() => setIsRenaming(true)}
-          onDelete={() => onDeleteColumn(column)}
-        />
-        <button
-          type="button"
-          className="k-icon-btn k-column__collapse"
-          onClick={() => toggleCollapsed(column.id)}
-          aria-label={`Collapse ${column.title}`}
-          title="Collapse list"
-        >
-          <IonIcon icon={contractOutline} aria-hidden="true" />
-        </button>
-      </header>
+      <ColumnHeader
+        column={column}
+        onAddTask={() => onAddTask(column.id)}
+        onDelete={() => onDeleteColumn(column)}
+        onCollapse={() => toggleCollapsed(column.id)}
+      />
 
       <div ref={setNodeRef} className="k-column__body">
         <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
