@@ -14,7 +14,14 @@ describe('TransferMenu', () => {
     const { onExport } = renderMenu();
     await userEvent.click(screen.getByRole('button', { name: 'Export / Import' }));
     await userEvent.click(await screen.findByText('Export as JSON'));
-    expect(onExport).toHaveBeenCalled();
+    expect(onExport).toHaveBeenCalledWith('json');
+  });
+
+  it('"Export as CSV" calls onExport with csv', async () => {
+    const { onExport } = renderMenu();
+    await userEvent.click(screen.getByRole('button', { name: 'Export / Import' }));
+    await userEvent.click(await screen.findByText('Export as CSV'));
+    expect(onExport).toHaveBeenCalledWith('csv');
   });
 
   it('passes the file chosen for import to onImport', () => {

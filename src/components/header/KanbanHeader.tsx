@@ -1,4 +1,5 @@
 import { MEMBERS } from '../../data/constants';
+import type { ExportFormat } from '../../utils/exportImport';
 import type { TaskFilters } from '../../utils/filterTasks';
 import AvatarStack from '../avatar/AvatarStack';
 import FilterMenu from './FilterMenu';
@@ -13,7 +14,7 @@ interface KanbanHeaderProps {
   onFiltersChange: (filters: TaskFilters) => void;
   resultCount: number;
   onInvite: (email: string) => void;
-  onExport: () => void;
+  onExport: (format: ExportFormat) => void;
   onImport: (file: File) => void;
   onReset: () => void;
 }

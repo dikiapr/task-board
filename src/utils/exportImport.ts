@@ -1,17 +1,18 @@
 import type { BoardData, Column, Task } from '../types/task';
 import { sanitizeAttachments } from './attachment';
+import { boardToCsv, parseBoardCsv } from './boardCsv';
 import { todayISO } from './date';
+import { downloadFile } from './download';
 
-export const exportBoard = (data: BoardData) => {
-  const blob = new Blob([JSON.stringify({ app: 'task-board', version: 2, ...data }, null, 2)], {
-    type: 'application/json',
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `task-board-${todayISO()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+export type ExportFormat = 'json' | 'csv';
+
+export const exportBoard = (data: BoardData, format: ExportFormat = 'json') => {
+  const fileName = `task-board-${todayISO()}.${format}`;
+  if (format === 'csv') {
+    downloadFile(boardToCsv(data), fileName, 'text/csv;charset=utf-8');
+  } else {
+    downloadFile(JSON.stringify({ app: 'task-board', version: 2, ...data }, null, 2), fileName, 'application/json');
+  }
 };
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
@@ -52,3 +53,7 @@ export const parseBoardFile = (text: string): BoardData => {
   if (columns.length === 0) throw new Error('File does not contain any list');
   return { columns, tasks };
 };
+
+/** Picks the parser from the file extension: `.csv` files are read as CSV, anything else as JSON. */
+export const parseImportFile = (fileName: string, text: string): BoardData =>
+  fileName.toLowerCase().endsWith('.csv') ? parseBoardCsv(text) : parseBoardFile(text);

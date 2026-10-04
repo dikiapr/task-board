@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { exportBoard, parseBoardFile } from '../../utils/exportImport';
+import { exportBoard, parseBoardFile, parseImportFile } from '../../utils/exportImport';
 import { todayISO } from '../../utils/date';
 import type { Column } from '../../types/task';
 import { makeTask } from '../fixtures';
@@ -51,6 +51,23 @@ describe('exportBoard', () => {
 
     const blob = vi.mocked(URL.createObjectURL).mock.calls[0][0] as Blob;
     expect(parseBoardFile(await readBlob(blob))).toEqual({ columns, tasks });
+  });
+
+  it('downloads a dated CSV file when asked', async () => {
+    exportBoard({ columns, tasks: [makeTask({ title: 'Fix login' })] }, 'csv');
+
+    expect(clickedLink().download).toBe(`task-board-${todayISO()}.csv`);
+    const blob = vi.mocked(URL.createObjectURL).mock.calls[0][0] as Blob;
+    expect(blob.type).toBe('text/csv;charset=utf-8');
+    expect(await readBlob(blob)).toContain('To Do,Fix login');
+  });
+});
+
+describe('parseImportFile', () => {
+  it('reads .csv files as CSV and anything else as JSON', () => {
+    expect(parseImportFile('Tasks.CSV', 'Title\nFrom CSV').tasks[0].title).toBe('From CSV');
+    expect(parseImportFile('board.json', JSON.stringify({ columns, tasks: [] })).columns).toEqual(columns);
+    expect(() => parseImportFile('board.txt', 'Title\nX')).toThrow('File is not valid JSON');
   });
 });
 

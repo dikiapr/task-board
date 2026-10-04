@@ -51,7 +51,7 @@ const lastAlert = (): AlertOptions => presentAlert.mock.lastCall![0];
 const alertButton = (text: string) =>
   (lastAlert().buttons as AlertButton[]).find((b) => b.text === text)!;
 const lastToastOptions = () => toast.mock.lastCall![1];
-const boardFile = (text: string) => ({ text: () => Promise.resolve(text) }) as File;
+const boardFile = (text: string, name = 'board.json') => ({ name, text: () => Promise.resolve(text) }) as File;
 const state = () => useBoardStore.getState();
 
 const alpha = makeTask({ id: 'a', title: 'Alpha' });
@@ -168,10 +168,24 @@ describe('KanbanPage', () => {
 
     it('exports the whole board, ignoring the active filter', () => {
       act(() => props.header.onFiltersChange({ ...EMPTY_FILTERS, search: 'alp' }));
-      props.header.onExport();
+      props.header.onExport('json');
 
-      expect(exportBoard).toHaveBeenCalledWith({ columns: state().columns, tasks: [alpha, beta] });
-      expect(toast).toHaveBeenCalledWith('Board exported');
+      expect(exportBoard).toHaveBeenCalledWith({ columns: state().columns, tasks: [alpha, beta] }, 'json');
+      expect(toast).toHaveBeenCalledWith('Board exported as JSON');
+    });
+
+    it('exports as CSV when asked', () => {
+      props.header.onExport('csv');
+      expect(exportBoard).toHaveBeenCalledWith({ columns: state().columns, tasks: [alpha, beta] }, 'csv');
+      expect(toast).toHaveBeenCalledWith('Board exported as CSV');
+    });
+
+    it('reads a .csv file as CSV', async () => {
+      await props.header.onImport(boardFile('List,Title\nDoing,From CSV', 'tasks.csv'));
+      expect(lastAlert().message).toBe('5 lists and 1 tasks will replace the current board.');
+
+      act(() => alertButton('Import').handler!({}));
+      expect(state().tasks).toMatchObject([{ title: 'From CSV', columnId: 'doing' }]);
     });
 
     it('asks before importing a valid file, then replaces the board', async () => {

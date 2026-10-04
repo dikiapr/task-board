@@ -4,7 +4,7 @@ import { alertCircleOutline, trashOutline } from 'ionicons/icons';
 import type { Column, ColumnId, EditorState, Task } from '../types/task';
 import { useBoardStore } from '../store/useBoardStore';
 import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../utils/filterTasks';
-import { exportBoard, parseBoardFile } from '../utils/exportImport';
+import { exportBoard, parseImportFile } from '../utils/exportImport';
 import '../theme/kanban.css';
 import KanbanHeader from '../components/header/KanbanHeader';
 import KanbanBoard from '../components/board/KanbanBoard';
@@ -52,7 +52,7 @@ const KanbanPage: React.FC = () => {
 
   const handleImport = async (file: File) => {
     try {
-      const data = parseBoardFile(await file.text());
+      const data = parseImportFile(file.name, await file.text());
       presentAlert({
         header: 'Import board?',
         message: `${data.columns.length} lists and ${data.tasks.length} tasks will replace the current board.`,
@@ -97,10 +97,10 @@ const KanbanPage: React.FC = () => {
         onFiltersChange={setFilters}
         resultCount={visibleTasks.length}
         onInvite={(email) => toast(`Invitation sent to ${email} (simulation)`)}
-        onExport={() => {
+        onExport={(format) => {
           const { columns, tasks: all } = useBoardStore.getState();
-          exportBoard({ columns, tasks: all });
-          toast('Board exported');
+          exportBoard({ columns, tasks: all }, format);
+          toast(`Board exported as ${format.toUpperCase()}`);
         }}
         onImport={handleImport}
         onReset={handleReset}
