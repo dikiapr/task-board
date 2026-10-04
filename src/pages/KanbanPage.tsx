@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
 import { IonContent, IonPage, useIonAlert } from '@ionic/react';
 import { alertCircleOutline, trashOutline } from 'ionicons/icons';
-import type { Column, ColumnId, Task } from '../types/task';
+import type { Column, ColumnId, EditorState, Task } from '../types/task';
 import { useBoardStore } from '../store/useBoardStore';
 import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../utils/filterTasks';
 import { exportBoard, parseBoardFile } from '../utils/exportImport';
 import '../theme/kanban.css';
 import KanbanHeader from '../components/header/KanbanHeader';
 import KanbanBoard from '../components/board/KanbanBoard';
-import TaskDetailModal, { type EditorState } from '../components/modal/TaskDetailModal';
+import TaskDetailModal from '../components/modal/TaskDetailModal';
 import { useToast } from '../hooks/useToast';
 
 const KanbanPage: React.FC = () => {

@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState, type SetStateAction } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IonContent, IonModal, useIonAlert } from '@ionic/react';
 import { trashOutline } from 'ionicons/icons';
-import type { ColumnId, Task, TaskInput } from '../../types/task';
+import type { EditorState, Task } from '../../types/task';
 import { DONE_COLUMN_ID } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
+import { useTaskDraft } from '../../hooks/useTaskDraft';
+import { cleanDraft, getReturnColumnId } from '../../utils/taskDraft';
 import Button from '../button/Button';
 import ActivityList from './ActivityList';
 import AttachmentsField from './AttachmentsField';
@@ -14,8 +16,6 @@ import DetailSection from './DetailSection';
 import DetailTopbar from './DetailTopbar';
 import TaskInfoSection from './TaskInfoSection';
 import './modal.css';
-
-export type EditorState = { mode: 'create'; columnId: ColumnId } | { mode: 'edit'; taskId: string };
 
 interface TaskDetailModalProps {
   editor: EditorState | null;
@@ -76,19 +76,6 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ editor, onDidDismiss,
   );
 };
 
-const emptyDraft = (columnId: ColumnId): TaskInput => ({
-  columnId,
-  title: '',
-  description: '',
-  assigneeIds: [],
-  dueDate: null,
-  label: 'Undefined',
-  priority: undefined,
-  subtasks: [],
-  attachments: [],
-  coverImage: undefined,
-});
-
 interface TaskDetailFormProps {
   editor: EditorState;
   onDirtyChange: (dirty: boolean) => void;
@@ -104,45 +91,28 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
   );
   const [presentAlert] = useIonAlert();
 
-  const [initial] = useState<TaskInput>(() => {
-    if (editor.mode === 'create') return emptyDraft(editor.columnId);
-    const task = useBoardStore.getState().tasks.find((t) => t.id === editor.taskId);
-    if (!task) return emptyDraft(columns[0]?.id ?? 'todo');
-    const { id, createdAt, activity, ...input } = task;
-    return input;
-  });
-  const [draft, setDraft] = useState(initial);
+  const { initial, draft, update, isDirty } = useTaskDraft(editor);
   const [isEditingTitle, setIsEditingTitle] = useState(editor.mode === 'create');
   const [showTitleError, setShowTitleError] = useState(false);
 
   useEffect(() => {
-    onDirtyChange(JSON.stringify(draft) !== JSON.stringify(initial));
-  }, [draft, initial, onDirtyChange]);
-
-  const update = <K extends keyof TaskInput>(key: K, action: SetStateAction<TaskInput[K]>) =>
-    setDraft((d) => ({
-      ...d,
-      [key]: typeof action === 'function' ? (action as (prev: TaskInput[K]) => TaskInput[K])(d[key]) : action,
-    }));
+    onDirtyChange(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   const isComplete = draft.columnId === DONE_COLUMN_ID;
-  const returnColumnId =
-    initial.columnId !== DONE_COLUMN_ID
-      ? initial.columnId
-      : (columns.find((c) => c.id !== DONE_COLUMN_ID)?.id ?? DONE_COLUMN_ID);
+  const returnColumnId = getReturnColumnId(initial.columnId, columns);
 
   const save = () => {
-    const title = draft.title.trim();
-    if (!title) {
+    const data = cleanDraft(draft);
+    if (!data.title) {
       setShowTitleError(true);
       setIsEditingTitle(true);
       return;
     }
-    const data: TaskInput = { ...draft, title, description: draft.description.trim() };
     const { addTask, updateTask } = useBoardStore.getState();
     if (editor.mode === 'edit') updateTask(editor.taskId, data);
     else addTask(data);
-    onSaved(editor.mode, title);
+    onSaved(editor.mode, data.title);
     onClose(true);
   };
 

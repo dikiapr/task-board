@@ -56,3 +56,5 @@ export interface BoardData {
   columns: Column[];
   tasks: Task[];
 }
+
+export type EditorState = { mode: 'create'; columnId: ColumnId } | { mode: 'edit'; taskId: string };

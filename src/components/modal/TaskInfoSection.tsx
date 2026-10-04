@@ -1,13 +1,11 @@
-import type { SetStateAction } from 'react';
 import { IonIcon } from '@ionic/react';
 import { pencil } from 'ionicons/icons';
 import type { Column, LabelType, Priority, TaskInput } from '../../types/task';
+import type { DraftUpdater } from '../../hooks/useTaskDraft';
 import { BOARD_NAME, LABELS, PRIORITIES } from '../../data/constants';
 import AssigneeField from './AssigneeField';
 import DetailSection from './DetailSection';
 import DueDateField from './DueDateField';
-
-export type DraftUpdater = <K extends keyof TaskInput>(key: K, action: SetStateAction<TaskInput[K]>) => void;
 
 interface TaskInfoSectionProps {
   draft: TaskInput;

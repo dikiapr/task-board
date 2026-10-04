@@ -1,7 +1,8 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import TaskDetailModal, { type EditorState } from '../../../components/modal/TaskDetailModal';
+import type { EditorState } from '../../../types/task';
+import TaskDetailModal from '../../../components/modal/TaskDetailModal';
 import { useBoardStore } from '../../../store/useBoardStore';
 import { makeTask, nextPresent, resetBoard } from '../../fixtures';
 
