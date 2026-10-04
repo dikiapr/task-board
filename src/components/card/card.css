@@ -61,11 +61,6 @@
   justify-content: space-between;
 }
 
-.k-card__priority {
-  display: inline-flex;
-  font-size: 0.85rem;
-}
-
 .k-card__title {
   margin: 0;
   color: var(--k-text-soft);

@@ -1,10 +1,11 @@
 import { IonIcon } from '@ionic/react';
-import { attachOutline, checkboxOutline, flag, timeOutline } from 'ionicons/icons';
+import { attachOutline, checkboxOutline, timeOutline } from 'ionicons/icons';
 import type { Task } from '../../types/task';
-import { DONE_COLUMN_ID, PRIORITY_COLORS } from '../../data/constants';
+import { DONE_COLUMN_ID } from '../../data/constants';
 import { formatShortDate, getDueStatus } from '../../utils/date';
 import AvatarStack from '../avatar/AvatarStack';
 import LabelPill from '../label/LabelPill';
+import PriorityFlag from '../priority/PriorityFlag';
 import ProgressBar from '../progress/ProgressBar';
 import './card.css';
 
@@ -27,16 +28,7 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ task, isOverlay }) => {
       <div className="k-card__body">
         <div className="k-card__labels">
           <LabelPill label={task.label} />
-          {task.priority && (
-            <span
-              className="k-card__priority"
-              style={{ color: PRIORITY_COLORS[task.priority] }}
-              title={`${task.priority} priority`}
-              aria-label={`${task.priority} priority`}
-            >
-              <IonIcon icon={flag} aria-hidden="true" />
-            </span>
-          )}
+          {task.priority && <PriorityFlag priority={task.priority} />}
         </div>
 
         {total > 0 && <ProgressBar done={doneCount} total={total} />}
