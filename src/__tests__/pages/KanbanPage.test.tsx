@@ -6,7 +6,7 @@ import { alertCircleOutline, trashOutline } from 'ionicons/icons';
 import KanbanPage from '../../pages/KanbanPage';
 import type KanbanHeader from '../../components/header/KanbanHeader';
 import type KanbanBoard from '../../components/board/KanbanBoard';
-import type TaskDetailModal from '../../components/modal/TaskDetailModal';
+import type TaskDetailModal from '../../components/task-detail/TaskDetailModal';
 import { useBoardStore } from '../../store/useBoardStore';
 import { exportBoard } from '../../utils/exportImport';
 import { EMPTY_FILTERS } from '../../utils/filterTasks';
@@ -32,7 +32,7 @@ vi.mock('../../components/header/KanbanHeader', () => ({
 vi.mock('../../components/board/KanbanBoard', () => ({
   default: (p: ChildProps['board']) => ((mocks.props.board = p), null),
 }));
-vi.mock('../../components/modal/TaskDetailModal', () => ({
+vi.mock('../../components/task-detail/TaskDetailModal', () => ({
   default: (p: ChildProps['modal']) => ((mocks.props.modal = p), null),
 }));
 vi.mock('../../hooks/useToast', () => ({ useToast: () => mocks.toast }));

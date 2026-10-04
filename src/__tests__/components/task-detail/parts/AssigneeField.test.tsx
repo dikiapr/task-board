@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import AssigneeField from '../../../components/modal/AssigneeField';
+import AssigneeField from '../../../../components/task-detail/parts/AssigneeField';
 
 describe('AssigneeField', () => {
   it('shows "Unassigned" without assignees', () => {

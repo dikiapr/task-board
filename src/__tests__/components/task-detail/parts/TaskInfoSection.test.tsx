@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import type { TaskInput } from '../../../types/task';
-import TaskInfoSection from '../../../components/modal/TaskInfoSection';
-import { DEFAULT_COLUMNS } from '../../../data/constants';
-import { makeTask } from '../../fixtures';
+import type { TaskInput } from '../../../../types/task';
+import TaskInfoSection from '../../../../components/task-detail/parts/TaskInfoSection';
+import { DEFAULT_COLUMNS } from '../../../../data/constants';
+import { makeTask } from '../../../fixtures';
 
 const { id, createdAt, activity, ...draft } = makeTask({ title: 'Fix login' });
 

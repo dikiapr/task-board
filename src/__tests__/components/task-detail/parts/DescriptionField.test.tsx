@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import DescriptionField from '../../../components/modal/DescriptionField';
+import DescriptionField from '../../../../components/task-detail/parts/DescriptionField';
 
 describe('DescriptionField', () => {
   it('shows the value and sends edits to onChange', async () => {

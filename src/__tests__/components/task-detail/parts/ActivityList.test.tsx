@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import ActivityList from '../../../components/modal/ActivityList';
+import ActivityList from '../../../../components/task-detail/parts/ActivityList';
 
 describe('ActivityList', () => {
   beforeEach(() => {

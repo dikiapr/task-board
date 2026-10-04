@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import DueDateField from '../../../components/modal/DueDateField';
+import DueDateField from '../../../../components/task-detail/parts/DueDateField';
 
 const nativeInput = (container: HTMLElement) => container.querySelector<HTMLInputElement>('input[type="date"]')!;
 

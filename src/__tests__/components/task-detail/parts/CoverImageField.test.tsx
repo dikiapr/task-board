@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import CoverImageField from '../../../components/modal/CoverImageField';
+import CoverImageField from '../../../../components/task-detail/parts/CoverImageField';
 
 // A plain function instead of vi.fn(): vi.fn reports a rejected result as an
 // unhandled error even when the component catches it.
 const image = vi.hoisted(() => ({ toDataUrl: (): Promise<string> => Promise.resolve('') }));
-vi.mock('../../../utils/image', () => ({ imageFileToDataUrl: () => image.toDataUrl() }));
+vi.mock('../../../../utils/image', () => ({ imageFileToDataUrl: () => image.toDataUrl() }));
 
 const upload = (container: HTMLElement) =>
   fireEvent.change(container.querySelector('input[type="file"]')!, {

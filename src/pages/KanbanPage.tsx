@@ -8,7 +8,7 @@ import { exportBoard, parseBoardFile } from '../utils/exportImport';
 import '../theme/kanban.css';
 import KanbanHeader from '../components/header/KanbanHeader';
 import KanbanBoard from '../components/board/KanbanBoard';
-import TaskDetailModal from '../components/modal/TaskDetailModal';
+import TaskDetailModal from '../components/task-detail/TaskDetailModal';
 import { useToast } from '../hooks/useToast';
 
 const KanbanPage: React.FC = () => {

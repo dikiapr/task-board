@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { IonModal, useIonAlert } from '@ionic/react';
 import type { EditorState } from '../../types/task';
 import TaskDetailForm, { type TaskDetailFormProps } from './TaskDetailForm';
-import './modal.css';
+import './task-detail.css';
 
 interface TaskDetailModalProps extends Pick<TaskDetailFormProps, 'onSaved' | 'onDeleted'> {
   editor: EditorState | null;

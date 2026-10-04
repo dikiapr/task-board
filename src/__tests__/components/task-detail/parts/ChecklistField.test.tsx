@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import type { Subtask } from '../../../types/task';
-import ChecklistField from '../../../components/modal/ChecklistField';
+import type { Subtask } from '../../../../types/task';
+import ChecklistField from '../../../../components/task-detail/parts/ChecklistField';
 
 // IonCheckbox never wires up its ionChange listener in jsdom, so swap in a native checkbox.
 vi.mock('@ionic/react', async (importOriginal) => ({

@@ -7,15 +7,15 @@ import { useBoardStore } from '../../store/useBoardStore';
 import { useTaskDraft } from '../../hooks/useTaskDraft';
 import { cleanDraft, getReturnColumnId } from '../../utils/taskDraft';
 import Button from '../button/Button';
-import ActivityList from './ActivityList';
-import AttachmentsField from './AttachmentsField';
-import ChecklistField from './ChecklistField';
-import CoverImageField from './CoverImageField';
-import DescriptionField from './DescriptionField';
-import DetailSection from './DetailSection';
-import DetailTopbar from './DetailTopbar';
-import TaskInfoSection from './TaskInfoSection';
-import './modal.css';
+import ActivityList from './parts/ActivityList';
+import AttachmentsField from './parts/AttachmentsField';
+import ChecklistField from './parts/ChecklistField';
+import CoverImageField from './parts/CoverImageField';
+import DescriptionField from './parts/DescriptionField';
+import DetailSection from './parts/DetailSection';
+import DetailTopbar from './parts/DetailTopbar';
+import TaskInfoSection from './parts/TaskInfoSection';
+import './task-detail.css';
 
 export interface TaskDetailFormProps {
   editor: EditorState;

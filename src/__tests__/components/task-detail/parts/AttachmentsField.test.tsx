@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import type { Attachment } from '../../../types/task';
-import AttachmentsField from '../../../components/modal/AttachmentsField';
+import type { Attachment } from '../../../../types/task';
+import AttachmentsField from '../../../../components/task-detail/parts/AttachmentsField';
 
 const Harness: React.FC<{ initial?: Attachment[] }> = ({ initial = [] }) => {
   const [value, setValue] = useState(initial);
