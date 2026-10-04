@@ -1,4 +1,3 @@
-import { IonIcon } from '@ionic/react';
 import { attachOutline, checkboxOutline } from 'ionicons/icons';
 import type { Task } from '../../types/task';
 import { DONE_COLUMN_ID } from '../../data/constants';
@@ -7,6 +6,7 @@ import DueBadge from '../due/DueBadge';
 import LabelPill from '../label/LabelPill';
 import PriorityFlag from '../priority/PriorityFlag';
 import ProgressBar from '../progress/ProgressBar';
+import CardMeta from './CardMeta';
 import './card.css';
 
 interface KanbanCardProps {
@@ -38,16 +38,14 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ task, isOverlay }) => {
           <div className="k-card__meta">
             {task.dueDate && <DueBadge date={task.dueDate} isDone={task.columnId === DONE_COLUMN_ID} />}
             {total > 0 && (
-              <span className="k-meta" title="Checklist">
-                <IonIcon icon={checkboxOutline} aria-hidden="true" />
+              <CardMeta icon={checkboxOutline} title="Checklist">
                 {doneCount}/{total}
-              </span>
+              </CardMeta>
             )}
             {task.attachments.length > 0 && (
-              <span className="k-meta" title="Attachments">
-                <IonIcon icon={attachOutline} aria-hidden="true" />
+              <CardMeta icon={attachOutline} title="Attachments">
                 {task.attachments.length}
-              </span>
+              </CardMeta>
             )}
           </div>
           <AvatarStack memberIds={task.assigneeIds} max={3} />
