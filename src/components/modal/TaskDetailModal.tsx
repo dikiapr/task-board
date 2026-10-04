@@ -10,6 +10,7 @@ import AttachmentsField from './AttachmentsField';
 import ChecklistField from './ChecklistField';
 import CoverImageField from './CoverImageField';
 import DescriptionField from './DescriptionField';
+import DetailSection from './DetailSection';
 import DetailTopbar from './DetailTopbar';
 import TaskInfoSection from './TaskInfoSection';
 import './modal.css';
@@ -189,25 +190,21 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
           showTitleError={showTitleError}
         />
 
-        <section className="k-detail__section">
-          <h3 className="k-detail__heading">Description</h3>
+        <DetailSection title="Description">
           <DescriptionField value={draft.description} onChange={(v) => update('description', v)} />
-        </section>
+        </DetailSection>
 
-        <section className="k-detail__section">
-          <h3 className="k-detail__heading">Attachments</h3>
+        <DetailSection title="Attachments">
           <AttachmentsField value={draft.attachments} onChange={(v) => update('attachments', v)} />
-        </section>
+        </DetailSection>
 
-        <section className="k-detail__section">
-          <h3 className="k-detail__heading">Check List</h3>
+        <DetailSection title="Check List">
           <ChecklistField value={draft.subtasks} onChange={(v) => update('subtasks', v)} />
-        </section>
+        </DetailSection>
 
-        <section className="k-detail__section">
-          <h3 className="k-detail__heading">Activity</h3>
+        <DetailSection title="Activity">
           <ActivityList items={activity ?? []} />
-        </section>
+        </DetailSection>
       </IonContent>
 
       <div className="k-detail__footer">

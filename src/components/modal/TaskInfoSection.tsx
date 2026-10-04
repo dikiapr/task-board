@@ -4,6 +4,7 @@ import { pencil } from 'ionicons/icons';
 import type { Column, LabelType, Priority, TaskInput } from '../../types/task';
 import { BOARD_NAME, LABELS, PRIORITIES } from '../../data/constants';
 import AssigneeField from './AssigneeField';
+import DetailSection from './DetailSection';
 import DueDateField from './DueDateField';
 
 export type DraftUpdater = <K extends keyof TaskInput>(key: K, action: SetStateAction<TaskInput[K]>) => void;
@@ -25,7 +26,7 @@ const TaskInfoSection: React.FC<TaskInfoSectionProps> = ({
   onEditingTitleChange,
   showTitleError,
 }) => (
-  <section className="k-detail__section">
+  <DetailSection>
     {isEditingTitle ? (
       <input
         className="k-title-input"
@@ -109,7 +110,7 @@ const TaskInfoSection: React.FC<TaskInfoSectionProps> = ({
         </select>
       </label>
     </div>
-  </section>
+  </DetailSection>
 );
 
 export default TaskInfoSection;
