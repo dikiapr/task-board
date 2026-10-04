@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type SetStateAction } from 'react';
 import { IonContent, IonIcon, IonModal, useIonAlert } from '@ionic/react';
-import { checkmark, close, pencil, trashOutline } from 'ionicons/icons';
+import { pencil, trashOutline } from 'ionicons/icons';
 import type { ColumnId, LabelType, Priority, Task, TaskInput } from '../../types/task';
 import { BOARD_NAME, DONE_COLUMN_ID, LABELS, PRIORITIES } from '../../data/constants';
 import { useBoardStore } from '../../store/useBoardStore';
@@ -10,6 +10,7 @@ import AssigneeField from './AssigneeField';
 import AttachmentsField from './AttachmentsField';
 import ChecklistField from './ChecklistField';
 import CoverImageField from './CoverImageField';
+import DetailTopbar from './DetailTopbar';
 import DueDateField from './DueDateField';
 import './modal.css';
 
@@ -170,20 +171,11 @@ const TaskDetailForm: React.FC<TaskDetailFormProps> = ({ editor, onDirtyChange, 
 
   return (
     <div className="k-detail">
-      <div className="k-detail__topbar">
-        <button
-          type="button"
-          className={`k-mark${isComplete ? ' is-complete' : ''}`}
-          aria-pressed={isComplete}
-          onClick={() => update('columnId', isComplete ? returnColumnId : DONE_COLUMN_ID)}
-        >
-          <IonIcon icon={checkmark} aria-hidden="true" />
-          {isComplete ? 'Completed' : 'Mark Complete'}
-        </button>
-        <button type="button" className="k-icon-btn k-icon-btn--boxed" onClick={() => onClose(false)} aria-label="Close">
-          <IonIcon icon={close} aria-hidden="true" />
-        </button>
-      </div>
+      <DetailTopbar
+        isComplete={isComplete}
+        onToggleComplete={() => update('columnId', isComplete ? returnColumnId : DONE_COLUMN_ID)}
+        onClose={() => onClose(false)}
+      />
 
       <IonContent className="k-detail__content">
         <CoverImageField value={draft.coverImage} onChange={(v) => update('coverImage', v)} />
