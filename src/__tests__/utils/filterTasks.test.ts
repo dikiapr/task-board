@@ -37,6 +37,37 @@ describe('filterTasks', () => {
     expect(ids(filterTasks(tasks, { ...EMPTY_FILTERS, search: '  login ' }, TODAY))).toEqual(['a', 'b']);
   });
 
+  describe('search', () => {
+    const search = (query: string, list: Task[] = tasks) =>
+      ids(filterTasks(list, { ...EMPTY_FILTERS, search: query }, TODAY));
+
+    it('matches assignee names', () => {
+      expect(search('andi')).toEqual(['a', 'c']);
+      expect(search('Citra Lestari')).toEqual(['c']);
+    });
+
+    it('matches the label, but not the "Undefined" placeholder', () => {
+      expect(search('bug')).toEqual(['b']);
+      expect(search('undefined')).toEqual([]);
+    });
+
+    it('matches checklist items', () => {
+      const list = [makeTask({ id: 'e', subtasks: [{ id: 's1', title: 'Write release notes', done: false }] })];
+      expect(search('release', list)).toEqual(['e']);
+    });
+
+    it('needs every word, in any order and across fields', () => {
+      expect(search('crash login')).toEqual(['b']);
+      expect(search('budi crash')).toEqual(['b']);
+      expect(search('login docs')).toEqual([]);
+    });
+
+    it('does not match a word that only exists by joining two fields', () => {
+      const list = [makeTask({ id: 'f', title: 'Ma', description: 'rket' })];
+      expect(search('market', list)).toEqual([]);
+    });
+  });
+
   it('the assignee filter returns tasks with any selected assignee', () => {
     expect(ids(filterTasks(tasks, { ...EMPTY_FILTERS, assigneeIds: ['m3', 'm2'] }, TODAY))).toEqual(['b', 'c']);
   });

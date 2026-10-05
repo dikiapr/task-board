@@ -1,5 +1,5 @@
 import type { LabelType, Task } from '../types/task';
-import { DONE_COLUMN_ID } from '../data/constants';
+import { DONE_COLUMN_ID, MEMBERS } from '../data/constants';
 import { addDays, todayISO } from './date';
 
 export type DueFilter = 'all' | 'overdue' | 'today' | 'week' | 'none';
@@ -39,15 +39,27 @@ const matchesDue = (task: Task, due: DueFilter, today: string) => {
   }
 };
 
+const searchableText = (task: Task) =>
+  [
+    task.title,
+    task.description,
+    task.label === 'Undefined' ? '' : task.label,
+    ...task.assigneeIds.map((id) => MEMBERS.find((m) => m.id === id)?.name ?? ''),
+    ...task.subtasks.map((s) => s.title),
+  ]
+    .join('\n')
+    .toLowerCase();
+
+const matchesSearch = (task: Task, words: string[]) => {
+  const text = searchableText(task);
+  return words.every((word) => text.includes(word));
+};
+
 export const filterTasks = (tasks: Task[], filters: TaskFilters, today = todayISO()): Task[] => {
-  const query = filters.search.trim().toLowerCase();
+  const words = filters.search.toLowerCase().split(/\s+/).filter(Boolean);
 
   return tasks.filter((task) => {
-    if (
-      query &&
-      !task.title.toLowerCase().includes(query) &&
-      !task.description.toLowerCase().includes(query)
-    ) {
+    if (words.length > 0 && !matchesSearch(task, words)) {
       return false;
     }
     if (

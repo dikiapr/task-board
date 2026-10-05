@@ -59,7 +59,7 @@ export const createSeedTasks = (): Task[] => {
       description: 'Pick the best office photos and crop them for the website hero section.',
       assigneeIds: ['m6'],
       dueDate: inDays(9),
-      label: 'Undefined',
+      label: 'Feature',
       subtasks: [],
       attachments: [],
       coverImage: DUMMY_COVERS[1],
@@ -86,7 +86,7 @@ export const createSeedTasks = (): Task[] => {
       description: 'Set up accounts, connect the newsletter list, and invite the marketing team.',
       assigneeIds: ['m2', 'm3', 'm6'],
       dueDate: inDays(6),
-      label: 'Undefined',
+      label: 'Feature',
       priority: 'Low',
       subtasks: checklist([
         ['Create workspace', true],
