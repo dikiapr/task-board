@@ -400,9 +400,91 @@ ion-modal.k-modal {
 
 .k-file__name {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.k-file__name:hover {
+  color: var(--k-primary);
+  text-decoration: underline;
+}
+
+/* ---------- Attachment preview ---------- */
+
+ion-modal.k-preview-modal {
+  --width: min(960px, 94vw);
+  --height: min(90vh, 900px);
+  --border-radius: 14px;
+}
+
+@media (max-width: 767px) {
+  ion-modal.k-preview-modal {
+    --width: 100%;
+    --height: 100%;
+    --border-radius: 0;
+  }
+}
+
+.k-preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--k-surface);
+}
+
+.k-preview__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+  border-bottom: 1px solid var(--k-border);
+  background: #fff;
+}
+
+.k-preview__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.k-preview__bar a.k-btn {
+  text-decoration: none;
+}
+
+.k-preview__body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 12px;
+}
+
+.k-preview__body img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.k-preview__body iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
 }
 
 /* ---------- Checklist ---------- */

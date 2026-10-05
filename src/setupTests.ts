@@ -3,6 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/vitest';
+// jsdom has no IndexedDB, where attachment files are stored.
+import 'fake-indexeddb/auto';
 import { cleanup } from '@testing-library/react';
 import { setupIonicReact } from '@ionic/react';
 

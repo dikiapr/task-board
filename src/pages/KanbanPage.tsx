@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IonContent, IonPage, useIonAlert } from '@ionic/react';
 import { alertCircleOutline, trashOutline } from 'ionicons/icons';
 import type { Column, ColumnId, EditorState, Task } from '../types/task';
 import { useBoardStore } from '../store/useBoardStore';
 import { EMPTY_FILTERS, filterTasks, isFilterActive } from '../utils/filterTasks';
 import { exportBoard, parseImportFile } from '../utils/exportImport';
+import { removeUnusedAttachmentFiles } from '../utils/attachmentFiles';
 import '../theme/kanban.css';
 import KanbanHeader from '../components/header/KanbanHeader';
 import KanbanBoard from '../components/board/KanbanBoard';
@@ -12,6 +13,10 @@ import TaskDetailModal from '../components/task-detail/TaskDetailModal';
 import { useToast } from '../hooks/useToast';
 
 const KanbanPage: React.FC = () => {
+  useEffect(() => {
+    removeUnusedAttachmentFiles(useBoardStore.getState().tasks).catch(() => undefined);
+  }, []);
+
   const tasks = useBoardStore((s) => s.tasks);
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const visibleTasks = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
