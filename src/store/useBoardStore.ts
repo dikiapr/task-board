@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
 import type { Activity, BoardData, Column, ColumnId, Task, TaskInput } from '../types/task';
 import { createDefaultColumns, createSeedTasks } from '../data/seed';
-import { DONE_COLUMN_ID, NEW_COLUMN_COLOR } from '../data/constants';
+import { DONE_COLUMN_ID } from '../data/constants';
 import { sanitizeAttachments } from '../utils/attachment';
 
 interface BoardState extends BoardData {
@@ -145,7 +145,7 @@ export const useBoardStore = create<BoardState>()(
         })),
 
       addColumn: (title) => {
-        const column: Column = { id: nanoid(8), title: title.trim(), color: NEW_COLUMN_COLOR };
+        const column: Column = { id: nanoid(8), title: title.trim() };
         set((state) => ({ columns: [...state.columns, column] }));
         return column;
       },

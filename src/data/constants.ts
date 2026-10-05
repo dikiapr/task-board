@@ -6,16 +6,14 @@ export const BOARD_NAME = 'Adhivasindo';
 export const HEADER_ID = 'kanban-header';
 
 export const DEFAULT_COLUMNS: Column[] = [
-  { id: 'todo', title: 'To Do', color: '#64748b' },
-  { id: 'doing', title: 'Doing', color: '#3b82f6' },
-  { id: 'review', title: 'Review', color: '#a855f7' },
-  { id: 'done', title: 'Done', color: '#22c55e' },
-  { id: 'rework', title: 'Rework', color: '#f97316' },
+  { id: 'todo', title: 'To Do' },
+  { id: 'doing', title: 'Doing' },
+  { id: 'review', title: 'Review' },
+  { id: 'done', title: 'Done' },
+  { id: 'rework', title: 'Rework' },
 ];
 
 export const DONE_COLUMN_ID = 'done';
-
-export const NEW_COLUMN_COLOR = '#94a3b8';
 
 export const LABELS: LabelType[] = ['Feature', 'Bug', 'Issue', 'Undefined'];
 

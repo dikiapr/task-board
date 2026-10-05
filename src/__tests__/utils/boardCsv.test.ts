@@ -6,8 +6,8 @@ import type { Column } from '../../types/task';
 import { makeTask } from '../fixtures';
 
 const columns: Column[] = [
-  { id: 'todo', title: 'To Do', color: '#64748b' },
-  { id: 'qa', title: 'QA', color: '#94a3b8' },
+  { id: 'todo', title: 'To Do' },
+  { id: 'qa', title: 'QA' },
 ];
 
 const rowsOf = (csv: string) => Papa.parse<string[]>(csv.replace(/^\uFEFF/, '')).data;

@@ -12,8 +12,8 @@ const readBlob = (blob: Blob) =>
   });
 
 const columns: Column[] = [
-  { id: 'todo', title: 'To Do', color: '#64748b' },
-  { id: 'done', title: 'Done', color: '#22c55e' },
+  { id: 'todo', title: 'To Do' },
+  { id: 'done', title: 'Done' },
 ];
 
 describe('exportBoard', () => {

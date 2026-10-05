@@ -1,7 +1,7 @@
 import Papa from 'papaparse';
 import { nanoid } from 'nanoid';
 import type { BoardData, Column, LabelType, Priority, Subtask, Task } from '../types/task';
-import { LABELS, MEMBERS, NEW_COLUMN_COLOR, PRIORITIES } from '../data/constants';
+import { LABELS, MEMBERS, PRIORITIES } from '../data/constants';
 import { createDefaultColumns } from '../data/seed';
 
 /**
@@ -98,7 +98,7 @@ export const parseBoardCsv = (text: string): BoardData => {
     if (!name) return columns[0];
     const existing = columns.find((c) => c.title.toLowerCase() === name.toLowerCase());
     if (existing) return existing;
-    const column = { id: nanoid(8), title: name, color: NEW_COLUMN_COLOR };
+    const column = { id: nanoid(8), title: name };
     columns.push(column);
     return column;
   };

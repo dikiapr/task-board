@@ -6,7 +6,6 @@ export type AttachmentType = 'pdf' | 'doc' | 'image';
 export interface Column {
   id: ColumnId;
   title: string;
-  color: string;
   collapsed?: boolean;
 }
 
